@@ -10,7 +10,7 @@
 #include "wx/appprogress.h"
 #include "wx/osx/private.h"
 
-@interface wxAppProgressDockIcon : NSObject
+@interface wxLDAppProgressDockIcon : NSObject
 {
     NSProgressIndicator* m_progIndicator;
     NSDockTile* m_dockTile;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation wxAppProgressDockIcon
+@implementation wxLDAppProgressDockIcon
 
 - (id)init
 {
@@ -82,7 +82,7 @@
 wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* WXUNUSED(parent), int maxValue ):
     m_maxValue(maxValue)
 {
-    wxAppProgressDockIcon* dockIcon = [[wxAppProgressDockIcon alloc] init];
+    wxLDAppProgressDockIcon* dockIcon = [[wxLDAppProgressDockIcon alloc] init];
     
     m_dockIcon = dockIcon;
 }
@@ -102,7 +102,7 @@ bool wxAppProgressIndicator::IsAvailable() const
 
 void wxAppProgressIndicator::SetValue(int value)
 {
-    wxAppProgressDockIcon* dockIcon = (wxAppProgressDockIcon*) m_dockIcon;
+    wxLDAppProgressDockIcon* dockIcon = (wxLDAppProgressDockIcon*) m_dockIcon;
     [dockIcon setProgress:(double)value / (double)m_maxValue];
 }
 
@@ -113,12 +113,12 @@ void wxAppProgressIndicator::SetRange(int range)
 
 void wxAppProgressIndicator::Pulse()
 {
-    wxAppProgressDockIcon* dockIcon = (wxAppProgressDockIcon*) m_dockIcon;
+    wxLDAppProgressDockIcon* dockIcon = (wxLDAppProgressDockIcon*) m_dockIcon;
     [dockIcon setIndeterminate:true];
 }
 
 void wxAppProgressIndicator::Reset()
 {
-    wxAppProgressDockIcon* dockIcon = (wxAppProgressDockIcon*) m_dockIcon;
+    wxLDAppProgressDockIcon* dockIcon = (wxLDAppProgressDockIcon*) m_dockIcon;
     [dockIcon reset];
 }

@@ -53,7 +53,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 wxBEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 wxEND_EVENT_TABLE()
 
-@interface WebViewLoadDelegate : NSObject<WebFrameLoadDelegate>
+@interface LDWebViewLoadDelegate : NSObject<WebFrameLoadDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -62,7 +62,7 @@ wxEND_EVENT_TABLE()
 
 @end
 
-@interface WebViewPolicyDelegate : NSObject<WebPolicyDelegate>
+@interface LDWebViewPolicyDelegate : NSObject<WebPolicyDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -71,7 +71,7 @@ wxEND_EVENT_TABLE()
 
 @end
 
-@interface WebViewUIDelegate : NSObject<WebUIDelegate>
+@interface LDWebViewUIDelegate : NSObject<WebUIDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -85,7 +85,7 @@ WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMa
 
 static wxStringToWebHandlerMap g_stringHandlerMap;
 
-@interface WebViewCustomProtocol : NSURLProtocol
+@interface LDWebViewCustomProtocol : NSURLProtocol
 {
 }
 @end
@@ -129,30 +129,30 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     // Register event listener interfaces
 #if wxOSX_USE_IPHONE
 #else
-    WebViewLoadDelegate* loadDelegate =
-            [[WebViewLoadDelegate alloc] initWithWxWindow: this];
+    LDWebViewLoadDelegate* loadDelegate =
+            [[LDWebViewLoadDelegate alloc] initWithWxWindow: this];
 
     [m_webView setFrameLoadDelegate:loadDelegate];
     
     m_loadDelegate = loadDelegate;
 
     // this is used to veto page loads, etc.
-    WebViewPolicyDelegate* policyDelegate =
-            [[WebViewPolicyDelegate alloc] initWithWxWindow: this];
+    LDWebViewPolicyDelegate* policyDelegate =
+            [[LDWebViewPolicyDelegate alloc] initWithWxWindow: this];
 
     [m_webView setPolicyDelegate:policyDelegate];
     
     m_policyDelegate = policyDelegate;
 
-    WebViewUIDelegate* uiDelegate =
-            [[WebViewUIDelegate alloc] initWithWxWindow: this];
+    LDWebViewUIDelegate* uiDelegate =
+            [[LDWebViewUIDelegate alloc] initWithWxWindow: this];
 
     [m_webView setUIDelegate:uiDelegate];
     
     m_UIDelegate = uiDelegate;
 #endif
     //Register our own class for custom scheme handling
-    [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
+    [NSURLProtocol registerClass:[LDWebViewCustomProtocol class]];
 
     LoadURL(strURL);
     return true;
@@ -729,7 +729,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 // destroyed. Therefore, we must be careful to check both the existence
 // of the Carbon control and the event handler before firing events.
 
-@implementation WebViewLoadDelegate
+@implementation LDWebViewLoadDelegate
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
@@ -919,7 +919,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 }
 @end
 
-@implementation WebViewPolicyDelegate
+@implementation LDWebViewPolicyDelegate
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
@@ -1004,7 +1004,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 #endif
 
-@implementation WebViewCustomProtocol
+@implementation LDWebViewCustomProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request
 {
@@ -1096,7 +1096,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 @end
 
 
-@implementation WebViewUIDelegate
+@implementation LDWebViewUIDelegate
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {

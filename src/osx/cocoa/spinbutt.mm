@@ -15,12 +15,12 @@
 #include "wx/spinbutt.h"
 #include "wx/osx/private.h"
 
-@interface wxNSStepper : NSStepper
+@interface wxLDNSStepper : NSStepper
 {
 }
 @end
 
-@implementation wxNSStepper
+@implementation wxLDNSStepper
 
 + (void)initialize
 {
@@ -135,7 +135,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSStepper* v = [[wxNSStepper alloc] initWithFrame:r];
+    wxLDNSStepper* v = [[wxLDNSStepper alloc] initWithFrame:r];
 
     [v setMinValue: minimum];
     [v setMaxValue: maximum];

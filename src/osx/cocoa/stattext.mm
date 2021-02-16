@@ -30,13 +30,13 @@
 
 #include <stdio.h>
 
-@interface wxNSStaticTextView : NSTextField
+@interface wxLDNSStaticTextView : NSTextField
 {
     NSColor *m_textColor;
 }
 @end
 
-@implementation wxNSStaticTextView
+@implementation wxLDNSStaticTextView
 
 + (void)initialize
 {
@@ -126,7 +126,7 @@ private:
         [attrstring addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle
                     range:NSMakeRange(0, [attrstring length])];
-        NSCell* cell = [(wxNSStaticTextView *)GetWXWidget() cell];
+        NSCell* cell = [(wxLDNSStaticTextView *)GetWXWidget() cell];
         [cell setAttributedStringValue:attrstring];
         [paragraphStyle release];
     }
@@ -149,7 +149,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSStaticTextView* v = [[wxNSStaticTextView alloc] initWithFrame:r];
+    wxLDNSStaticTextView* v = [[wxLDNSStaticTextView alloc] initWithFrame:r];
 
     [v setEditable:NO];
     [v setDrawsBackground:NO];

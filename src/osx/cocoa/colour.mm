@@ -14,14 +14,14 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-class wxNSColorRefData : public wxColourRefData
+class wxLDNSColorRefData : public wxColourRefData
 {
 public:
-    wxNSColorRefData(WX_NSColor color);
+    wxLDNSColorRefData(WX_NSColor color);
     
-    wxNSColorRefData(const wxNSColorRefData& other);
+    wxLDNSColorRefData(const wxLDNSColorRefData& other);
 
-    virtual ~wxNSColorRefData();
+    virtual ~wxLDNSColorRefData();
     
     virtual CGFloat Red() const wxOVERRIDE;
     virtual CGFloat Green() const wxOVERRIDE;
@@ -32,37 +32,37 @@ public:
 
     CGColorRef GetCGColor() const wxOVERRIDE;
     
-    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
+    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxLDNSColorRefData(*this); }
     
     virtual WX_NSColor GetNSColor() const wxOVERRIDE;
     virtual WX_NSImage GetNSPatternImage() const wxOVERRIDE;
 private:
     WX_NSColor m_nsColour;
     
-    wxDECLARE_NO_ASSIGN_CLASS(wxNSColorRefData);
+    wxDECLARE_NO_ASSIGN_CLASS(wxLDNSColorRefData);
 };
 
-wxNSColorRefData::wxNSColorRefData(WX_NSColor color)
+wxLDNSColorRefData::wxLDNSColorRefData(WX_NSColor color)
 {
     m_nsColour = [color retain];
 }
 
-wxNSColorRefData::wxNSColorRefData(const wxNSColorRefData& other)
+wxLDNSColorRefData::wxLDNSColorRefData(const wxLDNSColorRefData& other)
 {
     m_nsColour = [other.m_nsColour retain];
 }
 
-wxNSColorRefData::~wxNSColorRefData()
+wxLDNSColorRefData::~wxLDNSColorRefData()
 {
     [m_nsColour release];
 }
 
-WX_NSColor wxNSColorRefData::GetNSColor() const
+WX_NSColor wxLDNSColorRefData::GetNSColor() const
 {
     return m_nsColour;
 }
 
-CGFloat wxNSColorRefData::Red() const
+CGFloat wxLDNSColorRefData::Red() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
@@ -71,7 +71,7 @@ CGFloat wxNSColorRefData::Red() const
     return 0.0;
 }
 
-CGFloat wxNSColorRefData::Green() const
+CGFloat wxLDNSColorRefData::Green() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
@@ -80,7 +80,7 @@ CGFloat wxNSColorRefData::Green() const
     return 0.0;
 }
 
-CGFloat wxNSColorRefData::Blue() const
+CGFloat wxLDNSColorRefData::Blue() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
@@ -89,7 +89,7 @@ CGFloat wxNSColorRefData::Blue() const
     return 0.0;
 }
 
-CGFloat wxNSColorRefData::Alpha() const
+CGFloat wxLDNSColorRefData::Alpha() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
@@ -98,18 +98,18 @@ CGFloat wxNSColorRefData::Alpha() const
     return 0.0;
 }
 
-bool wxNSColorRefData::IsSolid() const
+bool wxLDNSColorRefData::IsSolid() const
 {
     return [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] != nil;
 }
 
-CGColorRef wxNSColorRefData::GetCGColor() const
+CGColorRef wxLDNSColorRefData::GetCGColor() const
 {
     wxOSXEffectiveAppearanceSetter helper;
     return [m_nsColour CGColor];
 }
 
-WX_NSImage wxNSColorRefData::GetNSPatternImage() const
+WX_NSImage wxLDNSColorRefData::GetNSPatternImage() const
 {
     NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace];
     if ( colPat )
@@ -137,5 +137,5 @@ WX_NSImage wxColourRefData::GetNSPatternImage() const
 
 wxColour::wxColour(WX_NSColor col)
 {
-    m_refData = new wxNSColorRefData(col);
+    m_refData = new wxLDNSColorRefData(col);
 }

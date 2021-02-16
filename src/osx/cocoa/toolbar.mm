@@ -44,7 +44,7 @@ wxEND_EVENT_TABLE()
 
 class wxToolBarTool;
 
-@interface wxNSToolBarButton : NSButton
+@interface wxLDNSToolBarButton : NSButton
 {
     wxToolBarTool* impl;
 }
@@ -146,7 +146,7 @@ public:
         else if ( IsButton() )
         {
             // curSize = GetToolBar()->GetToolSize();
-            NSRect best = [(wxNSToolBarButton*)m_controlHandle frame];
+            NSRect best = [(wxLDNSToolBarButton*)m_controlHandle frame];
             curSize = wxSize(best.size.width, best.size.height);
         }
         else
@@ -316,7 +316,7 @@ private:
 
 #if wxOSX_USE_NATIVE_TOOLBAR
 
-@interface wxNSToolbarItem : NSToolbarItem
+@interface wxLDNSToolbarItem : NSToolbarItem
 {
     wxToolBarTool* impl;
 }
@@ -330,7 +330,7 @@ private:
 @end
 
 
-@interface wxNSToolbarDelegate : NSObject <NSToolbarDelegate>
+@interface wxLDNSToolbarDelegate : NSObject <NSToolbarDelegate>
 {
     bool m_isSelectable;
 }
@@ -348,9 +348,9 @@ private:
 @end
 
 
-@interface wxNSToolbar : NSToolbar
+@interface wxLDNSToolbar : NSToolbar
 {
-    wxNSToolbarDelegate* toolbarDelegate;
+    wxLDNSToolbarDelegate* toolbarDelegate;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier;
@@ -363,7 +363,7 @@ private:
 
 #if wxOSX_USE_NATIVE_TOOLBAR
 
-@implementation wxNSToolbarItem
+@implementation wxLDNSToolbarItem
 
 - (id)initWithItemIdentifier: (NSString*) identifier
 {
@@ -403,7 +403,7 @@ private:
 
 @end
 
-@implementation wxNSToolbarDelegate
+@implementation wxLDNSToolbarDelegate
 
 - (id)init
 {
@@ -449,7 +449,7 @@ private:
 #endif
     if ( tool )
     {
-        wxNSToolbarItem* item = (wxNSToolbarItem*) tool->GetToolbarItemRef();
+        wxLDNSToolbarItem* item = (wxLDNSToolbarItem*) tool->GetToolbarItemRef();
         if ( flag && tool->IsControl() )
         {
             NSView* view = tool->GetControl()->GetHandle();
@@ -469,13 +469,13 @@ private:
 @end
 
 
-@implementation wxNSToolbar
+@implementation wxLDNSToolbar
 
 - (id)initWithIdentifier:(NSString *)identifier
 {
     if (self = [super initWithIdentifier:identifier])
     {
-        toolbarDelegate = [[wxNSToolbarDelegate alloc] init];
+        toolbarDelegate = [[wxLDNSToolbarDelegate alloc] init];
         [self setDelegate:toolbarDelegate];
     }
     return self;
@@ -491,7 +491,7 @@ private:
 
 #endif
 
-@implementation wxNSToolBarButton
+@implementation wxLDNSToolBarButton
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -724,7 +724,7 @@ bool wxToolBar::Create(
     {
         wxString identifier = wxString::Format( wxT("%p"), this );
         wxCFStringRef cfidentifier(identifier);
-        NSToolbar* tb =  [[wxNSToolbar alloc] initWithIdentifier:cfidentifier.AsNSString()];
+        NSToolbar* tb =  [[wxLDNSToolbar alloc] initWithIdentifier:cfidentifier.AsNSString()];
 
         m_macToolbar = tb ;
 
@@ -1513,7 +1513,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             {
                 wxASSERT( tool->GetControlHandle() == NULL );
 
-                wxNSToolBarButton* v = [[wxNSToolBarButton alloc] initWithFrame:toolrect];
+                wxLDNSToolBarButton* v = [[wxLDNSToolBarButton alloc] initWithFrame:toolrect];
 
                 [v setBezelStyle:NSSmallSquareBezelStyle];
                 [[v cell] setControlSize:NSSmallControlSize];
@@ -1529,7 +1529,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 {
                     wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
                     wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );
-                    wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
+                    wxLDNSToolbarItem* item = [[wxLDNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                     [item setImplementation:tool];
                     tool->SetToolbarItemRef( item );
                 }
@@ -1558,7 +1558,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
                 wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
                 wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );
-                wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
+                wxLDNSToolbarItem* item = [[wxLDNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                 [item setImplementation:tool];
                 tool->SetToolbarItemRef( item );
            }
@@ -1704,7 +1704,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 void wxToolBar::OSXSetSelectableTools(bool set)
 {
     wxCHECK_RET( m_macToolbar, "toolbar must be non-NULL" );
-    [(wxNSToolbarDelegate*)[(NSToolbar*)m_macToolbar delegate] setSelectable:set];
+    [(wxLDNSToolbarDelegate*)[(NSToolbar*)m_macToolbar delegate] setSelectable:set];
 }
 
 void wxToolBar::OSXSelectTool(int toolId)

@@ -16,13 +16,13 @@
 
 #include "wx/osx/private.h"
 
-@interface wxNSProgressIndicator : NSProgressIndicator
+@interface wxLDNSProgressIndicator : NSProgressIndicator
 {
 }
 
 @end
 
-@implementation wxNSProgressIndicator
+@implementation wxLDNSProgressIndicator
 
 + (void)initialize
 {
@@ -64,17 +64,17 @@ public :
 
     void PulseGauge() wxOVERRIDE
     {
-        if ( ![(wxNSProgressIndicator*)m_osxView isIndeterminate] )
+        if ( ![(wxLDNSProgressIndicator*)m_osxView isIndeterminate] )
         {
-            [(wxNSProgressIndicator*)m_osxView setIndeterminate:YES];
-            [(wxNSProgressIndicator*)m_osxView startAnimation:nil];
+            [(wxLDNSProgressIndicator*)m_osxView setIndeterminate:YES];
+            [(wxLDNSProgressIndicator*)m_osxView startAnimation:nil];
         }
     }
 
     void GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE
     {
         left = top = right = bottom = 0;
-        NSControlSize size = [(wxNSProgressIndicator*)m_osxView controlSize];
+        NSControlSize size = [(wxLDNSProgressIndicator*)m_osxView controlSize];
 
         switch( size )
         {
@@ -98,10 +98,10 @@ protected:
     void SetDeterminateMode()
     {
        // switch back to determinate mode if necessary
-        if ( [(wxNSProgressIndicator*)m_osxView isIndeterminate]  )
+        if ( [(wxLDNSProgressIndicator*)m_osxView isIndeterminate]  )
         {
-            [(wxNSProgressIndicator*)m_osxView stopAnimation:nil];
-            [(wxNSProgressIndicator*)m_osxView setIndeterminate:NO];
+            [(wxLDNSProgressIndicator*)m_osxView stopAnimation:nil];
+            [(wxLDNSProgressIndicator*)m_osxView setIndeterminate:NO];
         }
     }
 };
@@ -120,7 +120,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSProgressIndicator* v = [[wxNSProgressIndicator alloc] initWithFrame:r];
+    wxLDNSProgressIndicator* v = [[wxLDNSProgressIndicator alloc] initWithFrame:r];
 
     [v setMinValue: minimum];
     [v setMaxValue: maximum];

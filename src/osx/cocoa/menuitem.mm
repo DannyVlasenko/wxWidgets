@@ -22,7 +22,7 @@
 #include "wx/osx/private.h"
 
 // a mapping from wx ids to standard osx actions in order to support the native menu item handling
-// if a new mapping is added, make sure the wxNonOwnedWindowController has a handler for this action as well
+// if a new mapping is added, make sure the wxLDNonOwnedWindowController has a handler for this action as well
 
 struct Mapping
 {
@@ -72,7 +72,7 @@ SEL wxOSXGetSelectorFromID(int menuId )
 }
 
 
-@implementation wxNSMenuItem
+@implementation wxLDNSMenuItem
 
 - (id) initWithTitle:(NSString *)aString action:(SEL)aSelector keyEquivalent:(NSString *)charCode
 {
@@ -241,7 +241,7 @@ public :
     wxMenuItemCocoaImpl( wxMenuItem* peer, NSMenuItem* item ) : wxMenuItemImpl(peer), m_osxMenuItem(item)
     {
         if ( ![m_osxMenuItem isSeparatorItem] )
-            [(wxNSMenuItem*)m_osxMenuItem setImplementation:this];
+            [(wxLDNSMenuItem*)m_osxMenuItem setImplementation:this];
     }
 
     ~wxMenuItemCocoaImpl();
@@ -289,7 +289,7 @@ protected :
 wxMenuItemCocoaImpl::~wxMenuItemCocoaImpl()
 {
     if ( ![m_osxMenuItem isSeparatorItem] )
-        [(wxNSMenuItem*)m_osxMenuItem setImplementation:nil];
+        [(wxLDNSMenuItem*)m_osxMenuItem setImplementation:nil];
     [m_osxMenuItem release];
 }
 
@@ -352,7 +352,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
             }
         }
         
-        wxNSMenuItem* menuitem = [ [ wxNSMenuItem alloc ] initWithTitle:cfText.AsNSString() action:selector keyEquivalent:@""];
+        wxLDNSMenuItem* menuitem = [ [ wxLDNSMenuItem alloc ] initWithTitle:cfText.AsNSString() action:selector keyEquivalent:@""];
         if ( targetSelf )
             [menuitem setTarget:menuitem];
         

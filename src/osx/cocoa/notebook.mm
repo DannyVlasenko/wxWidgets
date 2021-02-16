@@ -29,7 +29,7 @@
 // controller
 //
 
-@interface wxTabViewController : NSObject <NSTabViewDelegate>
+@interface wxLDTabViewController : NSObject <NSTabViewDelegate>
 {
 }
 
@@ -38,13 +38,13 @@
 
 @end
 
-@interface wxNSTabView : NSTabView
+@interface wxLDNSTabView : NSTabView
 {
 }
 
 @end
 
-@implementation wxTabViewController
+@implementation wxLDTabViewController
 
 - (id) init
 {
@@ -55,7 +55,7 @@
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
     wxUnusedVar(tabViewItem);
-    wxNSTabView* view = (wxNSTabView*) tabView;
+    wxLDNSTabView* view = (wxLDNSTabView*) tabView;
     wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
 
     if ( viewimpl )
@@ -68,7 +68,7 @@
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
     wxUnusedVar(tabViewItem);
-    wxNSTabView* view = (wxNSTabView*) tabView;
+    wxLDNSTabView* view = (wxLDNSTabView*) tabView;
     wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
     if ( viewimpl )
     {
@@ -79,7 +79,7 @@
 
 @end
 
-@implementation wxNSTabView
+@implementation wxLDNSTabView
 
 + (void)initialize
 {
@@ -94,9 +94,9 @@
 @end
 
 // ========================================================================
-// WXCTabViewImageItem
+// WXLDCTabViewImageItem
 // ========================================================================
-@interface WXCTabViewImageItem : NSTabViewItem
+@interface WXLDCTabViewImageItem : NSTabViewItem
 {
     NSImage *m_image;
 }
@@ -106,10 +106,10 @@
 - (void)drawLabel:(BOOL)shouldTruncateLabel inRect:(NSRect)tabRect;
 - (NSImage*)image;
 - (void)setImage:(NSImage*)image;
-@end // interface WXCTabViewImageItem : NSTabViewItem
+@end // interface WXLDCTabViewImageItem : NSTabViewItem
 
 
-@implementation WXCTabViewImageItem : NSTabViewItem
+@implementation WXLDCTabViewImageItem : NSTabViewItem
 - (id)init
 {
     // With 10.12 SDK initWithIdentifier: is declared as taking a non-nil value
@@ -184,7 +184,7 @@
         return;
 }
 
-@end // implementation WXCTabViewImageItem : NSTabViewItem
+@end // implementation WXLDCTabViewImageItem : NSTabViewItem
 
 
 class wxCocoaTabView : public wxWidgetCocoaImpl
@@ -196,7 +196,7 @@ public:
 
     void GetContentArea( int &left , int &top , int &width , int &height ) const wxOVERRIDE
     {
-        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        wxLDNSTabView* slf = (wxLDNSTabView*) m_osxView;
         NSRect r = [slf contentRect];
         left = (int)r.origin.x;
         top = (int)r.origin.y;
@@ -206,9 +206,9 @@ public:
 
     void SetValue( wxInt32 value ) wxOVERRIDE
     {
-        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        wxLDNSTabView* slf = (wxLDNSTabView*) m_osxView;
         // avoid 'changed' events when setting the tab programmatically
-        wxTabViewController* controller = [slf delegate];
+        wxLDTabViewController* controller = [slf delegate];
         [slf setDelegate:nil];
         if ( value > 0 )
             [slf selectTabViewItemAtIndex:(value-1)];
@@ -217,7 +217,7 @@ public:
 
     wxInt32 GetValue() const wxOVERRIDE
     {
-        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        wxLDNSTabView* slf = (wxLDNSTabView*) m_osxView;
         NSTabViewItem* selectedItem = [slf selectedTabViewItem];
         if ( selectedItem == nil )
             return 0;
@@ -227,17 +227,17 @@ public:
 
     void SetMaximum( wxInt32 maximum ) wxOVERRIDE
     {
-        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        wxLDNSTabView* slf = (wxLDNSTabView*) m_osxView;
         int cocoacount = [slf numberOfTabViewItems ];
         // avoid 'changed' events when setting the tab programmatically
-        wxTabViewController* controller = [slf delegate];
+        wxLDTabViewController* controller = [slf delegate];
         [slf setDelegate:nil];
 
         if ( maximum > cocoacount )
         {
             for ( int i = cocoacount ; i < maximum ; ++i )
             {
-                NSTabViewItem* item = [[WXCTabViewImageItem alloc] init];
+                NSTabViewItem* item = [[WXLDCTabViewImageItem alloc] init];
                 [slf addTabViewItem:item];
                 [item release];
             }
@@ -246,7 +246,7 @@ public:
         {
             for ( int i = cocoacount -1 ; i >= maximum ; --i )
             {
-                NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
+                NSTabViewItem* item = [(wxLDNSTabView*) m_osxView tabViewItemAtIndex:i];
                 [slf removeTabViewItem:item];
             }
         }
@@ -262,7 +262,7 @@ public:
         for ( int i = 0 ; i < pcount ; ++i )
         {
             wxNotebookPage* page = notebook.GetPage(i);
-            NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
+            NSTabViewItem* item = [(wxLDNSTabView*) m_osxView tabViewItemAtIndex:i];
             [item setView:page->GetHandle() ];
             wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
             [item setLabel:cf.AsNSString()];
@@ -271,7 +271,7 @@ public:
                 const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( i ) ) ;
                 if ( bmap.IsOk() )
                 {
-                    [(WXCTabViewImageItem*) item setImage: bmap.GetNSImage()];
+                    [(WXLDCTabViewImageItem*) item setImage: bmap.GetNSImage()];
                 }
             }
         }
@@ -283,7 +283,7 @@ public:
         
         NSPoint nspt = wxToNSPoint( m_osxView, pt );
         
-        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        wxLDNSTabView* slf = (wxLDNSTabView*) m_osxView;
         
         NSTabViewItem* hitItem = [slf tabViewItemAtPoint:nspt];
         
@@ -349,10 +349,10 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                     long style,
                                     long WXUNUSED(extraStyle))
 {
-    static wxTabViewController* controller = NULL;
+    static wxLDTabViewController* controller = NULL;
 
     if ( !controller )
-        controller =[[wxTabViewController alloc] init];
+        controller =[[wxLDTabViewController alloc] init];
 
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
 
@@ -364,7 +364,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
     else if ( style & wxBK_BOTTOM )
         tabstyle = NSBottomTabsBezelBorder;
 
-    wxNSTabView* v = [[wxNSTabView alloc] initWithFrame:r];
+    wxLDNSTabView* v = [[wxLDNSTabView alloc] initWithFrame:r];
     [v setTabViewType:tabstyle];
     wxWidgetCocoaImpl* c = new wxCocoaTabView( wxpeer, v );
     [v setDelegate: controller];

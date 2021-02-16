@@ -83,6 +83,9 @@
 /build/msw/*.suo
 /build/msw/.vs/
 
+build-ld-release/
+build-ld-debug/
+
 # /build/osx
 **/*.xcodeproj/*
 !**/*.xcodeproj/project.pbxproj

@@ -34,7 +34,7 @@
 // ----------------------
 #include <string.h>
 
-@implementation wxNSMenu
+@implementation wxLDNSMenu
 
 - (id) initWithTitle:(NSString*) title
 {
@@ -61,7 +61,7 @@
 // and under 10.4, we are not getting a 'close' event however...
 #define wxOSX_USE_NEEDSUPDATE_HOOK 1
 
-@interface wxNSMenuController : NSObject <NSMenuDelegate>
+@interface wxLDNSMenuController : NSObject <NSMenuDelegate>
 {
 }
 
@@ -75,7 +75,7 @@
 
 @end
 
-@implementation wxNSMenuController
+@implementation wxLDNSMenuController
 
 - (id) init
 {
@@ -86,7 +86,7 @@
 #if wxOSX_USE_NEEDSUPDATE_HOOK
 - (void)menuNeedsUpdate:(NSMenu*)smenu
 {
-    wxNSMenu* menu = (wxNSMenu*) smenu;
+    wxLDNSMenu* menu = (wxLDNSMenu*) smenu;
     wxMenuImpl* menuimpl = [menu implementation];
     if ( menuimpl )
     {
@@ -98,7 +98,7 @@
 #else
 - (void)menuWillOpen:(NSMenu *)smenu
 {
-    wxNSMenu* menu = (wxNSMenu*) smenu;
+    wxLDNSMenu* menu = (wxLDNSMenu*) smenu;
     wxMenuImpl* menuimpl = [menu implementation];
     if ( menuimpl )
     {
@@ -111,7 +111,7 @@
 
 - (void)menuDidClose:(NSMenu *)smenu
 {
-    wxNSMenu* menu = (wxNSMenu*) smenu;
+    wxLDNSMenu* menu = (wxLDNSMenu*) smenu;
     wxMenuImpl* menuimpl = [menu implementation];
     if ( menuimpl )
     {
@@ -123,16 +123,16 @@
 
 - (void)menu:(NSMenu *)smenu willHighlightItem:(NSMenuItem *)item
 {
-    wxNSMenu* menu = (wxNSMenu*) smenu;
+    wxLDNSMenu* menu = (wxLDNSMenu*) smenu;
     wxMenuImpl* menuimpl = [menu implementation];
     if ( menuimpl )
     {
         wxMenuItem* menuitem = nullptr;
         wxMenu* wxpeer = (wxMenu*) menuimpl->GetWXPeer();
 
-        if ( [ item isKindOfClass:[wxNSMenuItem class] ] )
+        if ( [ item isKindOfClass:[wxLDNSMenuItem class] ] )
         {
-            wxMenuItemImpl* menuitemimpl = (wxMenuItemImpl*) [ (wxNSMenuItem*) item implementation ];
+            wxMenuItemImpl* menuitemimpl = (wxMenuItemImpl*) [ (wxLDNSMenuItem*) item implementation ];
             if ( menuitemimpl )
             {
                 menuitem = menuitemimpl->GetWXPeer();
@@ -155,12 +155,12 @@
 class wxMenuCocoaImpl : public wxMenuImpl
 {
 public :
-    wxMenuCocoaImpl( wxMenu* peer , wxNSMenu* menu) : wxMenuImpl(peer), m_osxMenu(menu)
+    wxMenuCocoaImpl( wxMenu* peer , wxLDNSMenu* menu) : wxMenuImpl(peer), m_osxMenu(menu)
     {
-        static wxNSMenuController* controller = NULL;
+        static wxLDNSMenuController* controller = NULL;
         if ( controller == NULL )
         {
-            controller = [[wxNSMenuController alloc] init];
+            controller = [[wxLDNSMenuController alloc] init];
         }
         [menu setDelegate:controller];
         [m_osxMenu setImplementation:this];
@@ -239,8 +239,8 @@ public :
     
     virtual NSMenu* MacCreateOrFindWindowMenu()
     {
-        NSString* nsWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName, wxStrip_Menu));
-        NSString* nsAlternateWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(_("&Window"), wxStrip_Menu));
+        NSString* nsWindowMenuTitle = wxLDNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName, wxStrip_Menu));
+        NSString* nsAlternateWindowMenuTitle = wxLDNSStringWithWxString(wxStripMenuCodes(_("&Window"), wxStrip_Menu));
 
         NSMenu* windowMenu = nil;
 
@@ -278,18 +278,18 @@ public :
             // already exists or not
             [windowMenu removeAllItems];
 
-            item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Minimize")) action:@selector(performMiniaturize:) keyEquivalent:@"m"];
+            item = [[NSMenuItem alloc] initWithTitle:wxLDNSStringWithWxString(_("Minimize")) action:@selector(performMiniaturize:) keyEquivalent:@"m"];
             [windowMenu insertItem:item atIndex:0];
             [item setEnabled:YES];
             [item release];
 
-            item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Zoom")) action:@selector(performZoom:) keyEquivalent:@""];
+            item = [[NSMenuItem alloc] initWithTitle:wxLDNSStringWithWxString(_("Zoom")) action:@selector(performZoom:) keyEquivalent:@""];
             [windowMenu insertItem:item atIndex:1];
             [item release];
 
             [windowMenu insertItem:[NSMenuItem separatorItem] atIndex:2];
 
-            item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Bring All to Front")) action:@selector(arrangeInFront:) keyEquivalent:@""];
+            item = [[NSMenuItem alloc] initWithTitle:wxLDNSStringWithWxString(_("Bring All to Front")) action:@selector(arrangeInFront:) keyEquivalent:@""];
             [windowMenu insertItem:item atIndex:3];
             [item release];
 
@@ -389,7 +389,7 @@ public :
     static wxMenuImpl* Create( wxMenu* peer, const wxString& title );
     static wxMenuImpl* CreateRootMenu( wxMenu* peer );
 protected :
-    wxNSMenu* m_osxMenu;
+    wxLDNSMenu* m_osxMenu;
 } ;
 
 wxMenuCocoaImpl::~wxMenuCocoaImpl()
@@ -404,7 +404,7 @@ wxMenuCocoaImpl::~wxMenuCocoaImpl()
 wxMenuImpl* wxMenuImpl::Create( wxMenu* peer, const wxString& title )
 {
     wxCFStringRef cfText( title );
-    wxNSMenu* menu = [[wxNSMenu alloc] initWithTitle:cfText.AsNSString()];
+    wxLDNSMenu* menu = [[wxLDNSMenu alloc] initWithTitle:cfText.AsNSString()];
     wxMenuImpl* c = new wxMenuCocoaImpl( peer, menu );
     return c;
 }

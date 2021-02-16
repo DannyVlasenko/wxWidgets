@@ -44,7 +44,7 @@ void wxBell()
     NSBeep();
 }
 
-@implementation wxNSAppController
+@implementation wxLDNSAppController
 
 - (void)applicationWillFinishLaunching:(NSNotification *)application
 {
@@ -231,7 +231,7 @@ void wxBell()
     allows ShowModal to work when using sheets.
     see include/wx/osx/cocoa/private.h for more info
 */
-@implementation ModalDialogDelegate
+@implementation LDModalDialogDelegate
 - (id)init
 {
     if ( self = [super init] )
@@ -289,7 +289,7 @@ void wxBell()
 // one possible solution is also quoted here
 // from https://stackoverflow.com/questions/7596643/when-calling-transformprocesstype-the-app-menu-doesnt-show-up
 
-@interface wxNSNonBundledAppHelper : NSObject {
+@interface wxLDNSNonBundledAppHelper : NSObject {
     
 }
 
@@ -297,7 +297,7 @@ void wxBell()
 
 @end
 
-@implementation wxNSNonBundledAppHelper
+@implementation wxLDNSNonBundledAppHelper
 
 + (void)transformToForegroundApplication {
     for (NSRunningApplication * app in [NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.apple.finder"]) {
@@ -325,7 +325,7 @@ void wxBell()
 #endif
 
 // here we subclass NSApplication, for the purpose of being able to override sendEvent.
-@interface wxNSApplication : NSApplication
+@interface wxLDNSApplication : NSApplication
 {
 }
 
@@ -335,7 +335,7 @@ void wxBell()
 
 @end
 
-@implementation wxNSApplication
+@implementation wxLDNSApplication
 
 - (id)init
 {
@@ -374,7 +374,7 @@ NSLayoutManager* gNSLayoutManager = nil;
 
 WX_NSObject wxApp::OSXCreateAppController()
 {
-    return [[wxNSAppController alloc] init];
+    return [[wxLDNSAppController alloc] init];
 }
 
 bool wxApp::DoInitGui()
@@ -383,7 +383,7 @@ bool wxApp::DoInitGui()
 
     if (!sm_isEmbedded)
     {
-        [wxNSApplication sharedApplication];
+        [wxLDNSApplication sharedApplication];
         
         if ( OSXIsGUIApplication() )
         {
@@ -395,7 +395,7 @@ bool wxApp::DoInitGui()
             // workaround is only needed for non-bundled apps
             if ( !app.EndsWith(".app") )
             {
-                [(wxNSApplication*) [wxNSApplication sharedApplication] transformToForegroundApplication];
+                [(wxLDNSApplication*) [wxLDNSApplication sharedApplication] transformToForegroundApplication];
             }
         }
 

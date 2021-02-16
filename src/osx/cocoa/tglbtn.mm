@@ -42,7 +42,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+    wxLDNSButton* v = [[wxLDNSButton alloc] initWithFrame:r];
 
     SetBezelStyleFromBorderFlags(v, style, winid, label);
 
@@ -61,7 +61,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+    wxLDNSButton* v = [[wxLDNSButton alloc] initWithFrame:r];
 
     SetBezelStyleFromBorderFlags(v, style, winid, wxString(), label);
     

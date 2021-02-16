@@ -122,7 +122,7 @@ public:
 
     virtual void HandleLineEvent( unsigned int n, bool doubleClick );
 
-    // This is called by wxNSTableView
+    // This is called by wxLDNSTableView
     void MacHandleSelectionChange(int row);
 
 protected:

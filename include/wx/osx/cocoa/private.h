@@ -253,7 +253,7 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 
-DECLARE_WXCOCOA_OBJC_CLASS( wxNSWindow );
+DECLARE_WXCOCOA_OBJC_CLASS( wxLDNSWindow );
 
 class wxNonOwnedWindowCocoaImpl : public wxNonOwnedWindowImpl
 {
@@ -345,12 +345,12 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl);
 };
 
-DECLARE_WXCOCOA_OBJC_CLASS( wxNSButton );
+DECLARE_WXCOCOA_OBJC_CLASS( wxLDNSButton );
 
 class wxButtonCocoaImpl : public wxWidgetCocoaImpl, public wxButtonImpl
 {
 public:
-    wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v);
+    wxButtonCocoaImpl(wxWindowMac *wxpeer, wxLDNSButton *v);
     virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
 #if wxUSE_MARKUP
     virtual void SetLabelMarkup(const wxString& markup) wxOVERRIDE;
@@ -385,20 +385,20 @@ public:
 
     // used for many wxControls
 
-    @interface wxNSButton : NSButton
+    @interface wxLDNSButton : NSButton
     {
         NSTrackingRectTag rectTag;
     }
 
     @end
 
-    @interface wxNSBox : NSBox
+    @interface wxLDNSBox : NSBox
     {
     }
 
     @end
 
-    @interface wxNSTextFieldEditor : NSTextView
+    @interface wxLDNSTextFieldEditor : NSTextView
     {
         NSEvent* lastKeyDownEvent;
         NSTextField* textField;
@@ -407,24 +407,24 @@ public:
     - (void) setTextField:(NSTextField*) field;
     @end
 
-    @interface wxNSTextField : NSTextField <NSTextFieldDelegate>
+    @interface wxLDNSTextField : NSTextField <NSTextFieldDelegate>
     {
-        wxNSTextFieldEditor* fieldEditor;
+        wxLDNSTextFieldEditor* fieldEditor;
     }
 
-    - (wxNSTextFieldEditor*) fieldEditor;
-    - (void) setFieldEditor:(wxNSTextFieldEditor*) fieldEditor;
+    - (wxLDNSTextFieldEditor*) fieldEditor;
+    - (void) setFieldEditor:(wxLDNSTextFieldEditor*) fieldEditor;
 
     @end
 
-    @interface wxNSSecureTextField : NSSecureTextField <NSTextFieldDelegate>
+    @interface wxLDNSSecureTextField : NSSecureTextField <NSTextFieldDelegate>
     {
     }
 
     @end
 
 
-    @interface wxNSTextView : NSTextView <NSTextViewDelegate>
+    @interface wxLDNSTextView : NSTextView <NSTextViewDelegate>
     {
     }
 
@@ -433,19 +433,19 @@ public:
 
     @end
 
-    @interface wxNSComboBox : NSComboBox
+    @interface wxLDNSComboBox : NSComboBox
     {
-        wxNSTextFieldEditor* fieldEditor;
+        wxLDNSTextFieldEditor* fieldEditor;
     }
 
-    - (wxNSTextFieldEditor*) fieldEditor;
-    - (void) setFieldEditor:(wxNSTextFieldEditor*) fieldEditor;
+    - (wxLDNSTextFieldEditor*) fieldEditor;
+    - (void) setFieldEditor:(wxLDNSTextFieldEditor*) fieldEditor;
 
     @end
 
 
 
-    @interface wxNSMenu : NSMenu
+    @interface wxLDNSMenu : NSMenu
     {
        wxMenuImpl* impl;
     }
@@ -455,7 +455,7 @@ public:
 
     @end
 
-    @interface wxNSMenuItem : NSMenuItem
+    @interface wxLDNSMenuItem : NSMenuItem
     {
        wxMenuItemImpl* impl;
     }
@@ -481,7 +481,7 @@ public:
     returns control to the app, whereas we don't want to return from ShowModal
     until the sheet has been dismissed.
     */
-    @interface ModalDialogDelegate : NSObject
+    @interface LDModalDialogDelegate : NSObject
     {
         BOOL sheetFinished;
         int resultCode;
@@ -510,7 +510,7 @@ public:
 #ifdef __LP64__
     WXEXPORT
 #endif // 64 bit builds
-    @interface wxNSAppController : NSObject <NSApplicationDelegate>
+    @interface wxLDNSAppController : NSObject <NSApplicationDelegate>
     {
     }
 

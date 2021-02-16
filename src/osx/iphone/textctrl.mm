@@ -89,13 +89,13 @@ protected :
 
 @end
 
-@interface wxNSSecureTextField : UITextField<UITextFieldDelegate>
+@interface wxLDNSSecureTextField : UITextField<UITextFieldDelegate>
 {
 }
 
 @end
 
-@implementation wxNSSecureTextField
+@implementation wxLDNSSecureTextField
 
 + (void)initialize
 {

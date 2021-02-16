@@ -39,7 +39,7 @@
 // implementation
 // ============================================================================
 
-@interface wxOSXOverlayView : NSView
+@interface wxLDOSXOverlayView : NSView
 {
 }
 
@@ -50,24 +50,24 @@
 
 @end
 
-@interface wxOSXOverlayWindow : NSWindow
+@interface wxLDOSXOverlayWindow : NSWindow
 {
 }
 - (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag;
 
-@property (retain) wxOSXOverlayView *overlayView;
+@property (retain) wxLDOSXOverlayView *overlayView;
 
 @end
 
 
-@implementation wxOSXOverlayWindow
+@implementation wxLDOSXOverlayWindow
 
 - (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag
 {
     self = [super initWithContentRect:contentRect styleMask:style backing:backingStoreType defer:flag];
     if ( self )
     {
-        self.overlayView = [[wxOSXOverlayView alloc] initWithFrame:contentRect];
+        self.overlayView = [[wxLDOSXOverlayView alloc] initWithFrame:contentRect];
         [self setContentView:self.overlayView];
 
         [self setOpaque:NO];
@@ -80,7 +80,7 @@
 
 @end
 
-@implementation wxOSXOverlayView
+@implementation wxLDOSXOverlayView
 
 - (void)drawRect:(NSRect)dirtyRect
 {
@@ -157,7 +157,7 @@ void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
         NSRect overlayRect = wxToNSRect(NULL, wxRect(origin, size));
         overlayRect = [NSWindow contentRectForFrameRect:overlayRect styleMask:NSBorderlessWindowMask];
 
-        m_overlayWindow = [[wxOSXOverlayWindow alloc] initWithContentRect:overlayRect
+        m_overlayWindow = [[wxLDOSXOverlayWindow alloc] initWithContentRect:overlayRect
                                                       styleMask:NSBorderlessWindowMask
                                                         backing:NSBackingStoreBuffered
                                                           defer:YES];
@@ -169,7 +169,7 @@ void wxOverlayImpl::CreateOverlayWindow( wxDC* dc )
         CGRect cgbounds;
         cgbounds = CGDisplayBounds(CGMainDisplayID());
 
-        m_overlayWindow = [[wxOSXOverlayWindow alloc] initWithContentRect:NSMakeRect(cgbounds.origin.x, cgbounds.origin.y,
+        m_overlayWindow = [[wxLDOSXOverlayWindow alloc] initWithContentRect:NSMakeRect(cgbounds.origin.x, cgbounds.origin.y,
                                                                     cgbounds.size.width,
                                                                     cgbounds.size.height)
                                                       styleMask:NSBorderlessWindowMask
@@ -211,7 +211,7 @@ void wxOverlayImpl::BeginDrawing( wxDC* dc)
             ySize = cgbounds.size.height;
         }
 
-        wxOSXOverlayWindow* wxoverlay = (wxOSXOverlayWindow*) m_overlayWindow;
+        wxLDOSXOverlayWindow* wxoverlay = (wxLDOSXOverlayWindow*) m_overlayWindow;
         NSBitmapImageRep* rep = wxoverlay.overlayView.bitmapImageRep;
         m_overlayContext = [[NSGraphicsContext graphicsContextWithBitmapImageRep:rep] CGContext];
         wxASSERT_MSG(  m_overlayContext != NULL , "Couldn't init the context on the overlay window" );
@@ -237,7 +237,7 @@ void wxOverlayImpl::EndDrawing( wxDC* dc)
 
     CGContextFlush( m_overlayContext );
     m_overlayContext = NULL;
-    wxOSXOverlayWindow* wxoverlay = (wxOSXOverlayWindow*) m_overlayWindow;
+    wxLDOSXOverlayWindow* wxoverlay = (wxLDOSXOverlayWindow*) m_overlayWindow;
     [wxoverlay.overlayView setNeedsDisplay:YES];
 }
 

@@ -121,7 +121,7 @@ int wxMessageDialog::ShowModal()
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
+        LDModalDialogDelegate* sheetDelegate = [[LDModalDialogDelegate alloc] init];
         [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];

@@ -21,13 +21,13 @@
 
 #include "wx/osx/private.h"
 
-@interface wxNSPopUpButton : NSPopUpButton
+@interface wxLDNSPopUpButton : NSPopUpButton
 {
 }
 
 @end
 
-@implementation wxNSPopUpButton
+@implementation wxLDNSPopUpButton
 
 + (void)initialize
 {
@@ -58,7 +58,7 @@
 class wxChoiceCocoaImpl : public wxWidgetCocoaImpl, public wxChoiceWidgetImpl
 {
 public:
-    wxChoiceCocoaImpl(wxWindowMac *wxpeer, wxNSPopUpButton *v)
+    wxChoiceCocoaImpl(wxWindowMac *wxpeer, wxLDNSPopUpButton *v)
     : wxWidgetCocoaImpl(wxpeer, v)
     {
         m_popUpMenu = new wxMenu();
@@ -144,7 +144,7 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
+    wxLDNSPopUpButton* v = [[wxLDNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
     wxWidgetCocoaImpl* c = new wxChoiceCocoaImpl( wxpeer, v );
     return c;
 }

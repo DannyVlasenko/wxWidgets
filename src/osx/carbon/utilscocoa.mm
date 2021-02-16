@@ -386,11 +386,11 @@ static NSCursor* wxCreateStockCursor( short sIndex )
     //identical mask that is 1 for on and 0 for off
     ClassicCursor* pCursor = &gMacCursors[sIndex];
 
-    wxNSObjRef<NSImage*> theImage( [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)] );
+    wxLDNSObjRef<NSImage*> theImage( [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)] );
 
     //NSCursor takes an NSImage takes a number of Representations - here
     //we need only one for the raw data
-    wxNSObjRef<NSBitmapImageRep*> theRep( [[NSBitmapImageRep alloc]
+    wxLDNSObjRef<NSBitmapImageRep*> theRep( [[NSBitmapImageRep alloc]
         initWithBitmapDataPlanes: NULL  // Tell Cocoa to allocate the planes for us.
         pixelsWide: 16      // All classic cursors are 16x16
         pixelsHigh: 16
@@ -614,7 +614,7 @@ wxString wxStringWithNSString(NSString *nsstring)
 #endif // wxUSE_UNICODE
 }
 
-NSString* wxNSStringWithWxString(const wxString &wxstring)
+NSString* wxLDNSStringWithWxString(const wxString &wxstring)
 {
 #if wxUSE_UNICODE
     return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];

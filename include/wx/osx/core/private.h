@@ -62,7 +62,7 @@ WXDLLIMPEXP_BASE long wxMacTranslateKey(unsigned char key, unsigned char code);
 // NSString<->wxString
 
 WXDLLIMPEXP_BASE wxString wxStringWithNSString(NSString *nsstring);
-WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
+WXDLLIMPEXP_BASE NSString* wxLDNSStringWithWxString(const wxString &wxstring);
 
 WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
@@ -1022,27 +1022,27 @@ void* wxMacCocoaRetain( void* obj );
 
 // shared_ptr like API for NSObject and subclasses
 template <class T>
-class wxNSObjRef
+class wxLDNSObjRef
 {
 public:
     typedef T element_type;
 
-    wxNSObjRef()
+    wxLDNSObjRef()
         : m_ptr(NULL)
     {
     }
 
-    wxNSObjRef( T p )
+    wxLDNSObjRef( T p )
         : m_ptr(p)
     {
     }
 
-    wxNSObjRef( const wxNSObjRef& otherRef )
+    wxLDNSObjRef( const wxLDNSObjRef& otherRef )
         : m_ptr(wxMacCocoaRetain(otherRef.m_ptr))
     {
     }
 
-    wxNSObjRef& operator=( const wxNSObjRef& otherRef )
+    wxLDNSObjRef& operator=( const wxLDNSObjRef& otherRef )
     {
         if (this != &otherRef)
         {
@@ -1053,7 +1053,7 @@ public:
         return *this;
     }
     
-    wxNSObjRef& operator=( T ptr )
+    wxLDNSObjRef& operator=( T ptr )
     {
         if (get() != ptr)
         {

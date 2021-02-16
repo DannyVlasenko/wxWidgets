@@ -40,13 +40,13 @@ using namespace wxOSXImpl;
 // Cocoa wrappers
 // ----------------------------------------------------------------------------
 
-@interface wxNSDatePicker : NSDatePicker
+@interface wxLDNSDatePicker : NSDatePicker
 {
 }
 
 @end
 
-@implementation wxNSDatePicker
+@implementation wxLDNSDatePicker
 
 + (void)initialize
 {
@@ -70,7 +70,7 @@ namespace
 class wxDateTimeWidgetCocoaImpl : public wxDateTimeWidgetImpl
 {
 public:
-    wxDateTimeWidgetCocoaImpl(wxDateTimePickerCtrl* peer, wxNSDatePicker* w)
+    wxDateTimeWidgetCocoaImpl(wxDateTimePickerCtrl* peer, wxLDNSDatePicker* w)
         : wxDateTimeWidgetImpl(peer, w)
     {
     }
@@ -130,7 +130,7 @@ public:
 
     virtual void Enable(bool enable = true) wxOVERRIDE
     {
-        wxNSDatePicker* const nsdatePicker = View();
+        wxLDNSDatePicker* const nsdatePicker = View();
 
         [nsdatePicker setEnabled: enable];
 
@@ -149,9 +149,9 @@ public:
     }
 
 private:
-    wxNSDatePicker* View() const
+    wxLDNSDatePicker* View() const
     {
-        return static_cast<wxNSDatePicker *>(m_osxView);
+        return static_cast<wxLDNSDatePicker *>(m_osxView);
     }
 };
 
@@ -171,7 +171,7 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
                                            wxDateTimeWidgetKind kind)
 {
     NSRect r = wxOSXGetFrameForControl(wxpeer, pos, size);
-    wxNSDatePicker* v = [[wxNSDatePicker alloc] initWithFrame:r];
+    wxLDNSDatePicker* v = [[wxLDNSDatePicker alloc] initWithFrame:r];
 
     NSDatePickerElementFlags elements = 0;
     switch ( kind )

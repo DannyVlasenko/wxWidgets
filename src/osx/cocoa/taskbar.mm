@@ -283,11 +283,11 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
     return false;
 }
 
-@interface wxNSAppController(wxTaskBarIconNSApplicationDelegateCategory)
+@interface wxLDNSAppController(wxTaskBarIconNSApplicationDelegateCategory)
 - (NSMenu*)applicationDockMenu:(NSApplication *)sender;
 @end
 
-@implementation wxNSAppController(wxTaskBarIconNSApplicationDelegateCategory)
+@implementation wxLDNSAppController(wxTaskBarIconNSApplicationDelegateCategory)
 - (NSMenu*)applicationDockMenu:(NSApplication *)sender
 {
     wxUnusedVar(sender);

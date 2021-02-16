@@ -25,7 +25,7 @@
 #endif // wxUSE_MARKUP
 
 
-@implementation wxNSButton
+@implementation wxLDNSButton
 
 + (void)initialize
 {
@@ -82,7 +82,7 @@
 - (NSControlSize)controlSize;
 @end
 
-wxButtonCocoaImpl::wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
+wxButtonCocoaImpl::wxButtonCocoaImpl(wxWindowMac *wxpeer, wxLDNSButton *v)
 : wxWidgetCocoaImpl(wxpeer, v)
 {
     SetNeedsFrame(false);
@@ -318,7 +318,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+    wxLDNSButton* v = [[wxLDNSButton alloc] initWithFrame:r];
 
     SetBezelStyleFromBorderFlags(v, style, winid, label);
 
@@ -360,7 +360,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
                                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+    wxLDNSButton* v = [[wxLDNSButton alloc] initWithFrame:r];
 
     SetBezelStyleFromBorderFlags(v, style, winid, wxString(), bitmap);
 

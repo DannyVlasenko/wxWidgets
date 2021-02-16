@@ -22,7 +22,7 @@
 #include "wx/osx/private.h"
 
 // a mapping from wx ids to standard osx actions in order to support the native menu item handling
-// if a new mapping is added, make sure the wxNonOwnedWindowController has a handler for this action as well
+// if a new mapping is added, make sure the wxLDNonOwnedWindowController has a handler for this action as well
 
 struct Mapping
 {

@@ -93,7 +93,7 @@ public :
     }
 
     // Returns true if this editor is the one currently being modified.
-    static bool IsCurrentEditor(wxNSTextFieldEditor* e)
+    static bool IsCurrentEditor(wxLDNSTextFieldEditor* e)
     {
         return e == [(NSTextField*)ms_viewCurrentlyEdited currentEditor];
     }
@@ -113,7 +113,7 @@ protected :
 NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // an NSFormatter used to implement SetMaxLength() and ForceUpper() methods
-@interface wxTextEntryFormatter : NSFormatter
+@interface wxLDTextEntryFormatter : NSFormatter
 {
     int maxLength;
     wxTextEntry* field;
@@ -122,7 +122,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-@implementation wxTextEntryFormatter
+@implementation wxLDTextEntryFormatter
 
 - (id)init
 {
@@ -169,7 +169,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         }
     }
 
-    // wxTextEntryFormatter is always associated with single-line text entry (through wxNSTextFieldControl)
+    // wxLDTextEntryFormatter is always associated with single-line text entry (through wxLDNSTextFieldControl)
     // so all new line characters should be replaced with spaces (like it is done in single-line NSCell).
     NSString* lineStr = [*partialStringPtr stringByReplacingOccurrencesOfString: @"\n" withString: @" "];
 
@@ -191,7 +191,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-@implementation wxNSSecureTextField
+@implementation wxLDNSSecureTextField
 
 + (void)initialize
 {
@@ -237,7 +237,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                 {
                     wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
                     event.SetEventObject( wxpeer );
-                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextWidgetImpl* impl = (wxLDNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
                     wxTextEntry * const entry = impl->GetTextEntry();
                     event.SetString( entry->GetValue() );
                     handled = wxpeer->HandleWindowEvent( event );
@@ -271,7 +271,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                         [cevent keyCode] == 9 /* V */ &&
                             ([cevent modifierFlags] & NSCommandKeyMask) == NSCommandKeyMask )
                 {
-                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextWidgetImpl* impl = (wxLDNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
                     wxTextEntry * const entry = impl->GetTextEntry();
                     entry->Paste();
                     handled = YES;
@@ -324,12 +324,12 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-@interface wxNSTextScrollView : NSScrollView
+@interface wxLDNSTextScrollView : NSScrollView
 {
 }
 @end
 
-@implementation wxNSTextScrollView
+@implementation wxLDNSTextScrollView
 
 + (void)initialize
 {
@@ -343,7 +343,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-@implementation wxNSTextFieldEditor
+@implementation wxLDNSTextFieldEditor
 
 - (void) keyDown:(NSEvent*) event
 {
@@ -408,7 +408,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-@implementation wxNSTextView
+@implementation wxLDNSTextView
 
 + (void)initialize
 {
@@ -523,7 +523,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @end
 
-@implementation wxNSTextField
+@implementation wxLDNSTextField
 
 + (void)initialize
 {
@@ -550,7 +550,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     [super dealloc];
 }
 
-- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
+- (void) setFieldEditor:(wxLDNSTextFieldEditor*) editor
 {
     if ( editor != fieldEditor )
     {
@@ -560,7 +560,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     }
 }
 
-- (wxNSTextFieldEditor*) fieldEditor
+- (wxLDNSTextFieldEditor*) fieldEditor
 {
     return fieldEditor;
 }
@@ -594,7 +594,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 {
     NSMutableArray* matches = [NSMutableArray array];
 
-    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+    wxTextWidgetImpl* impl = (wxLDNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
     wxTextEntry * const entry = impl->GetTextEntry();
     wxTextCompleter * const completer = entry->OSXGetCompleter();
     if ( completer )
@@ -681,7 +681,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
-        wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
+        wxLDNSTextFieldControl* timpl = dynamic_cast<wxLDNSTextFieldControl*>(impl);
         if ( timpl )
             timpl->UpdateInternalSelectionFromEditor(fieldEditor);
         impl->DoNotifyFocusLost();
@@ -690,7 +690,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 @end
 
 
-bool wxNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
+bool wxLDNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
 {
     // Text controls must be allowed to handle the key even if wxWANTS_CHARS is not set, provided wxTE_PROCESS_TAB
     // is set. To make Shift+TAB work with text controls we must process it here regardless of wxTE_PROCESS_TAB.
@@ -698,7 +698,7 @@ bool wxNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
     return (!m_wxPeer->HasFlag(wxTE_PROCESS_TAB) || event.HasAnyModifiers());
 }
 
-// wxNSTextViewControl
+// wxLDNSTextViewControl
 
 // Official Apple docs suggest to use FLT_MAX when embedding an NSTextView
 // object inside an NSScrollView, see here:
@@ -707,10 +707,10 @@ bool wxNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
 // 1000000 instead of FLT_MAX fixes this
 #define MAX_WIDTH 1000000
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
-    : wxNSTextBase(wxPeer, w)
+wxLDNSTextViewControl::wxLDNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
+    : wxLDNSTextBase(wxPeer, w)
 {
-    wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
+    wxLDNSTextScrollView* sv = (wxLDNSTextScrollView*) w;
     m_scrollView = sv;
 
     const bool hasHScroll = (style & wxHSCROLL) != 0;
@@ -725,7 +725,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
             hasHScroll ? MAX_WIDTH : contentSize.width, contentSize.height
         );
 
-    wxNSTextView* const tv = [[wxNSTextView alloc] initWithFrame: viewFrame];
+    wxLDNSTextView* const tv = [[wxLDNSTextView alloc] initWithFrame: viewFrame];
     m_textView = tv;
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:hasHScroll];
@@ -764,13 +764,13 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     InstallEventHandler(tv);
 }
 
-wxNSTextViewControl::~wxNSTextViewControl()
+wxLDNSTextViewControl::~wxLDNSTextViewControl()
 {
     if (m_textView)
         [m_textView setDelegate: nil];
 }
 
-bool wxNSTextViewControl::CanFocus() const
+bool wxLDNSTextViewControl::CanFocus() const
 {
     // since this doesn't work (return false), we hardcode
     // if (m_textView)
@@ -778,7 +778,7 @@ bool wxNSTextViewControl::CanFocus() const
     return true;
 }
 
-void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
+void wxLDNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
 {
     NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [(id)str string] : str;
     if ( !IsInNativeKeyDown() || !DoHandleCharEvent(GetLastNativeKeyDownEvent(), text) )
@@ -788,7 +788,7 @@ void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
     }
 }
 
-wxString wxNSTextViewControl::GetStringValue() const
+wxString wxLDNSTextViewControl::GetStringValue() const
 {
     wxString result;
     if (m_textView)
@@ -799,7 +799,7 @@ wxString wxNSTextViewControl::GetStringValue() const
     return result;
 }
 
-void wxNSTextViewControl::SetStringValue( const wxString &str)
+void wxLDNSTextViewControl::SetStringValue( const wxString &str)
 {
     wxMacEditHelper helper(m_textView);
 
@@ -817,43 +817,43 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
     }
 }
 
-void wxNSTextViewControl::Copy()
+void wxLDNSTextViewControl::Copy()
 {
     if (m_textView)
         [m_textView copy:nil];
 
 }
 
-void wxNSTextViewControl::Cut()
+void wxLDNSTextViewControl::Cut()
 {
     if (m_textView)
         [m_textView cut:nil];
 }
 
-void wxNSTextViewControl::Paste()
+void wxLDNSTextViewControl::Paste()
 {
     if (m_textView)
         [m_textView paste:nil];
 }
 
-bool wxNSTextViewControl::CanPaste() const
+bool wxLDNSTextViewControl::CanPaste() const
 {
     return true;
 }
 
-void wxNSTextViewControl::SetEditable(bool editable)
+void wxLDNSTextViewControl::SetEditable(bool editable)
 {
     if (m_textView)
         [m_textView setEditable: editable];
 }
 
-long wxNSTextViewControl::GetLastPosition() const
+long wxLDNSTextViewControl::GetLastPosition() const
 {
     wxCHECK( m_textView, 0 );
     return [[m_textView string] length];
 }
 
-void wxNSTextViewControl::GetSelection( long* from, long* to) const
+void wxLDNSTextViewControl::GetSelection( long* from, long* to) const
 {
     if (m_textView)
     {
@@ -863,7 +863,7 @@ void wxNSTextViewControl::GetSelection( long* from, long* to) const
     }
 }
 
-void wxNSTextViewControl::SetSelection( long from , long to )
+void wxLDNSTextViewControl::SetSelection( long from , long to )
 {
     long textLength = [[m_textView string] length];
     if ((from == -1) && (to == -1))
@@ -885,7 +885,7 @@ void wxNSTextViewControl::SetSelection( long from , long to )
     [m_textView scrollRangeToVisible:selrange];
 }
 
-bool wxNSTextViewControl::PositionToXY(long pos, long *x, long *y) const
+bool wxLDNSTextViewControl::PositionToXY(long pos, long *x, long *y) const
 {
     wxCHECK( m_textView, false );
     wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
@@ -916,7 +916,7 @@ bool wxNSTextViewControl::PositionToXY(long pos, long *x, long *y) const
     return true;
 }
 
-long wxNSTextViewControl::XYToPosition(long x, long y) const
+long wxLDNSTextViewControl::XYToPosition(long x, long y) const
 {
     wxCHECK( m_textView, -1 );
     wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
@@ -975,7 +975,7 @@ long wxNSTextViewControl::XYToPosition(long x, long y) const
     return lineRng.location + x;
 }
 
-void wxNSTextViewControl::ShowPosition(long pos)
+void wxLDNSTextViewControl::ShowPosition(long pos)
 {
     if ( !m_textView )
         return;
@@ -984,7 +984,7 @@ void wxNSTextViewControl::ShowPosition(long pos)
     [m_textView scrollRangeToVisible:NSMakeRange(pos, 1)];
 }
 
-void wxNSTextViewControl::WriteText(const wxString& str)
+void wxLDNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
@@ -994,14 +994,14 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     DoUpdateTextStyle();
 }
 
-void wxNSTextViewControl::controlTextDidChange()
+void wxLDNSTextViewControl::controlTextDidChange()
 {
-    wxNSTextBase::controlTextDidChange();
+    wxLDNSTextBase::controlTextDidChange();
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
 }
 
-void wxNSTextViewControl::DoUpdateTextStyle()
+void wxLDNSTextViewControl::DoUpdateTextStyle()
 {
     if ( m_useCharWrapping )
     {
@@ -1015,13 +1015,13 @@ void wxNSTextViewControl::DoUpdateTextStyle()
     }
 }
 
-void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )
+void wxLDNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )
 {
     if ([m_textView respondsToSelector:@selector(setFont:)])
         [m_textView setFont: font.OSXGetNSFont()];
 }
 
-bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
+bool wxLDNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 {
     if (m_textView && position >=0)
     {
@@ -1095,7 +1095,7 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
     return false;
 }
 
-void wxNSTextViewControl::SetStyle(long start,
+void wxLDNSTextViewControl::SetStyle(long start,
                                 long end,
                                 const wxTextAttr& style)
 {
@@ -1200,25 +1200,25 @@ void wxNSTextViewControl::SetStyle(long start,
     }
 }
 
-void wxNSTextViewControl::CheckSpelling(bool check)
+void wxLDNSTextViewControl::CheckSpelling(bool check)
 {
     if (m_textView)
         [m_textView setContinuousSpellCheckingEnabled: check];
 }
 
-void wxNSTextViewControl::EnableAutomaticQuoteSubstitution(bool enable)
+void wxLDNSTextViewControl::EnableAutomaticQuoteSubstitution(bool enable)
 {
     if (m_textView)
         [m_textView setAutomaticQuoteSubstitutionEnabled:enable];
 }
 
-void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
+void wxLDNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
 {
     if (m_textView)
         [m_textView setAutomaticDashSubstitutionEnabled:enable];
 }
 
-wxSize wxNSTextViewControl::GetBestSize() const
+wxSize wxLDNSTextViewControl::GetBestSize() const
 {
     wxSize size;
     if ( NSLayoutManager* const layoutManager = [m_textView layoutManager] )
@@ -1252,7 +1252,7 @@ wxSize wxNSTextViewControl::GetBestSize() const
     return size;
 }
 
-void wxNSTextViewControl::SetJustification()
+void wxLDNSTextViewControl::SetJustification()
 {
     if ( !m_textView )
         return;
@@ -1269,23 +1269,23 @@ void wxNSTextViewControl::SetJustification()
     [m_textView setAlignment:align];
 }
 
-// wxNSTextFieldControl
+// wxLDNSTextFieldControl
 
-wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
-    : wxNSTextBase(text, w)
+wxLDNSTextFieldControl::wxLDNSTextFieldControl( wxTextCtrl *text, WXWidget w )
+    : wxLDNSTextBase(text, w)
 {
     Init(w);
 }
 
-wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
+wxLDNSTextFieldControl::wxLDNSTextFieldControl(wxWindow *wxPeer,
                                            wxTextEntry *entry,
                                            WXWidget w)
-    : wxNSTextBase(wxPeer, entry, w)
+    : wxLDNSTextBase(wxPeer, entry, w)
 {
     Init(w);
 }
 
-void wxNSTextFieldControl::Init(WXWidget w)
+void wxLDNSTextFieldControl::Init(WXWidget w)
 {
     NSTextField <NSTextFieldDelegate> *tf = (NSTextField <NSTextFieldDelegate>*) w;
     m_textField = tf;
@@ -1296,32 +1296,32 @@ void wxNSTextFieldControl::Init(WXWidget w)
     GetFormatter(); // we always need to at least replace new line characters with spaces
 }
 
-wxNSTextFieldControl::~wxNSTextFieldControl()
+wxLDNSTextFieldControl::~wxLDNSTextFieldControl()
 {
     if (m_textField)
         [m_textField setDelegate: nil];
 }
 
-wxString wxNSTextFieldControl::GetStringValue() const
+wxString wxLDNSTextFieldControl::GetStringValue() const
 {
     return wxCFStringRef::AsString([m_textField stringValue], m_wxPeer->GetFont().GetEncoding());
 }
 
-void wxNSTextFieldControl::SetStringValue( const wxString &str)
+void wxLDNSTextFieldControl::SetStringValue( const wxString &str)
 {
     wxMacEditHelper helper(m_textField);
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
-wxTextEntryFormatter* wxNSTextFieldControl::GetFormatter()
+wxLDTextEntryFormatter* wxLDNSTextFieldControl::GetFormatter()
 {
-    // We only ever call setFormatter with wxTextEntryFormatter, so the cast is
+    // We only ever call setFormatter with wxLDTextEntryFormatter, so the cast is
     // safe.
-    wxTextEntryFormatter*
-        formatter = (wxTextEntryFormatter*)[m_textField formatter];
+    wxLDTextEntryFormatter*
+        formatter = (wxLDTextEntryFormatter*)[m_textField formatter];
     if ( !formatter )
     {
-        formatter = [[[wxTextEntryFormatter alloc] init] autorelease];
+        formatter = [[[wxLDTextEntryFormatter alloc] init] autorelease];
         [formatter setTextEntry:GetTextEntry()];
         [m_textField setFormatter:formatter];
     }
@@ -1329,17 +1329,17 @@ wxTextEntryFormatter* wxNSTextFieldControl::GetFormatter()
     return formatter;
 }
 
-void wxNSTextFieldControl::SetMaxLength(unsigned long len)
+void wxLDNSTextFieldControl::SetMaxLength(unsigned long len)
 {
     [GetFormatter() setMaxLength:len];
 }
 
-void wxNSTextFieldControl::ForceUpper()
+void wxLDNSTextFieldControl::ForceUpper()
 {
     [GetFormatter() forceUpper];
 }
 
-void wxNSTextFieldControl::Copy()
+void wxLDNSTextFieldControl::Copy()
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -1348,7 +1348,7 @@ void wxNSTextFieldControl::Copy()
     }
 }
 
-void wxNSTextFieldControl::Cut()
+void wxLDNSTextFieldControl::Cut()
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -1357,7 +1357,7 @@ void wxNSTextFieldControl::Cut()
     }
 }
 
-void wxNSTextFieldControl::Paste()
+void wxLDNSTextFieldControl::Paste()
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -1366,22 +1366,22 @@ void wxNSTextFieldControl::Paste()
     }
 }
 
-bool wxNSTextFieldControl::CanPaste() const
+bool wxLDNSTextFieldControl::CanPaste() const
 {
     return true;
 }
 
-void wxNSTextFieldControl::SetEditable(bool editable)
+void wxLDNSTextFieldControl::SetEditable(bool editable)
 {
     [m_textField setEditable:editable];
 }
 
-long wxNSTextFieldControl::GetLastPosition() const
+long wxLDNSTextFieldControl::GetLastPosition() const
 {
     return [[m_textField stringValue] length];
 }
 
-void wxNSTextFieldControl::GetSelection( long* from, long* to) const
+void wxLDNSTextFieldControl::GetSelection( long* from, long* to) const
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -1397,7 +1397,7 @@ void wxNSTextFieldControl::GetSelection( long* from, long* to) const
     }
 }
 
-void wxNSTextFieldControl::SetSelection( long from , long to )
+void wxLDNSTextFieldControl::SetSelection( long from , long to )
 {
     long textLength = [[m_textField stringValue] length];
     if ((from == -1) && (to == -1))
@@ -1426,7 +1426,7 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     m_selEnd = to;
 }
 
-bool wxNSTextFieldControl::PositionToXY(long pos, long *x, long *y) const
+bool wxLDNSTextFieldControl::PositionToXY(long pos, long *x, long *y) const
 {
     wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
 
@@ -1442,7 +1442,7 @@ bool wxNSTextFieldControl::PositionToXY(long pos, long *x, long *y) const
     return true;
 }
 
-long wxNSTextFieldControl::XYToPosition(long x, long y) const
+long wxLDNSTextFieldControl::XYToPosition(long x, long y) const
 {
     wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
 
@@ -1453,7 +1453,7 @@ long wxNSTextFieldControl::XYToPosition(long x, long y) const
     return x;
 }
 
-void wxNSTextFieldControl::ShowPosition(long pos)
+void wxLDNSTextFieldControl::ShowPosition(long pos)
 {
     wxCHECK_RET( pos >= 0, wxS("Invalid character position") );
     NSText* editor = [m_textField currentEditor];
@@ -1463,7 +1463,7 @@ void wxNSTextFieldControl::ShowPosition(long pos)
     }
 }
 
-void wxNSTextFieldControl::WriteText(const wxString& str)
+void wxLDNSTextFieldControl::WriteText(const wxString& str)
 {
     wxWidgetCocoaNativeKeyDownSuspender suspend(this);
     NSText* editor = [m_textField currentEditor];
@@ -1489,7 +1489,7 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     }
 }
 
-void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
+void wxLDNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
@@ -1502,13 +1502,13 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     }
 }
 
-void wxNSTextFieldControl::SetInternalSelection( long from , long to )
+void wxLDNSTextFieldControl::SetInternalSelection( long from , long to )
 {
     m_selStart = from;
     m_selEnd = to;
 }
 
-void wxNSTextFieldControl::UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* fieldEditor )
+void wxLDNSTextFieldControl::UpdateInternalSelectionFromEditor( wxLDNSTextFieldEditor* fieldEditor )
 {
     if ( fieldEditor )
     {
@@ -1522,7 +1522,7 @@ void wxNSTextFieldControl::UpdateInternalSelectionFromEditor( wxNSTextFieldEdito
 
 static WXWidget s_widgetBecomingFirstResponder = nil;
 
-bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
+bool wxLDNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     s_widgetBecomingFirstResponder = slf;
     bool retval = wxWidgetCocoaImpl::becomeFirstResponder(slf, _cmd);
@@ -1530,7 +1530,7 @@ bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
     return retval;
 }
 
-bool wxNSTextFieldControl::resignFirstResponder(WXWidget slf, void *_cmd)
+bool wxLDNSTextFieldControl::resignFirstResponder(WXWidget slf, void *_cmd)
 {
     if ( slf != s_widgetBecomingFirstResponder )
     {
@@ -1545,14 +1545,14 @@ bool wxNSTextFieldControl::resignFirstResponder(WXWidget slf, void *_cmd)
     return wxWidgetCocoaImpl::resignFirstResponder(slf, _cmd);
 }
 
-bool wxNSTextFieldControl::SetHint(const wxString& hint)
+bool wxLDNSTextFieldControl::SetHint(const wxString& hint)
 {
     wxCFStringRef hintstring(hint);
     [[m_textField cell] setPlaceholderString:hintstring.AsNSString()];
     return true;
 }
 
-void wxNSTextFieldControl::SetJustification()
+void wxLDNSTextFieldControl::SetJustification()
 {
     if ( !m_textField )
         return;
@@ -1586,9 +1586,9 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
 
     if ( style & wxTE_MULTILINE )
     {
-        wxNSTextScrollView* v = nil;
-        v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        wxNSTextViewControl* t = new wxNSTextViewControl( wxpeer, v, style );
+        wxLDNSTextScrollView* v = nil;
+        v = [[wxLDNSTextScrollView alloc] initWithFrame:r];
+        wxLDNSTextViewControl* t = new wxLDNSTextViewControl( wxpeer, v, style );
         c = t;
         c->SetNeedsFocusRect( true );
 
@@ -1598,9 +1598,9 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         NSTextField* v = nil;
         if ( style & wxTE_PASSWORD )
-            v = [[wxNSSecureTextField alloc] initWithFrame:r];
+            v = [[wxLDNSSecureTextField alloc] initWithFrame:r];
         else
-            v = [[wxNSTextField alloc] initWithFrame:r];
+            v = [[wxLDNSTextField alloc] initWithFrame:r];
 
         if ( style & wxTE_RIGHT)
         {
@@ -1615,7 +1615,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [cell setWraps:NO];
         [cell setScrollable:YES];
 
-        wxNSTextFieldControl* t = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        wxLDNSTextFieldControl* t = new wxLDNSTextFieldControl( wxpeer, wxpeer, v );
         c = t;
 
         if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )

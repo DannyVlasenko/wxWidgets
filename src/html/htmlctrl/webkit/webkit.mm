@@ -108,7 +108,7 @@ inline int wxNavTypeFromWebNavType(int type){
     return wxWEBKIT_NAV_OTHER;
 }
 
-@interface MyFrameLoadMonitor : NSObject<WebFrameLoadDelegate>
+@interface LDMyFrameLoadMonitor : NSObject<WebFrameLoadDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -117,7 +117,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyPolicyDelegate : NSObject<WebPolicyDelegate>
+@interface LDMyPolicyDelegate : NSObject<WebPolicyDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -126,7 +126,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyUIDelegate : NSObject<WebUIDelegate>
+@interface LDMyUIDelegate : NSObject<WebUIDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -179,17 +179,17 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
     // Register event listener interfaces
     
-    MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: this];
+    LDMyFrameLoadMonitor* myFrameLoadMonitor = [[LDMyFrameLoadMonitor alloc] initWithWxWindow: this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
     m_frameLoadMonitor = myFrameLoadMonitor;
     
     // this is used to veto page loads, etc.
-    MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
+    LDMyPolicyDelegate* myPolicyDelegate = [[LDMyPolicyDelegate alloc] initWithWxWindow: this];
     [m_webView setPolicyDelegate:myPolicyDelegate];
     m_policyDelegate = myPolicyDelegate;
 
     // this is used to provide printing support for JavaScript
-    MyUIDelegate* myUIDelegate = [[MyUIDelegate alloc] initWithWxWindow: this];
+    LDMyUIDelegate* myUIDelegate = [[LDMyUIDelegate alloc] initWithWxWindow: this];
     [m_webView setUIDelegate:myUIDelegate];
     m_UIDelegate = myUIDelegate;
     
@@ -222,7 +222,7 @@ void wxWebKitCtrl::LoadURL(const wxString &url)
     if( !m_webView )
         return;
 
-    [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:wxNSStringWithWxString(url)]]];
+    [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:wxLDNSStringWithWxString(url)]]];
 
     m_currentURL = url;
 }
@@ -337,7 +337,7 @@ void wxWebKitCtrl::SetPageSource(const wxString& source, const wxString& baseUrl
     if ( !m_webView )
         return;
 
-    [[m_webView mainFrame] loadHTMLString:(NSString*)wxNSStringWithWxString( source ) baseURL:[NSURL URLWithString:wxNSStringWithWxString( baseUrl )]];
+    [[m_webView mainFrame] loadHTMLString:(NSString*)wxLDNSStringWithWxString( source ) baseURL:[NSURL URLWithString:wxLDNSStringWithWxString( baseUrl )]];
 
 }
 
@@ -382,14 +382,14 @@ void wxWebKitCtrl::SetScrollPos(int pos){
 
     wxString javascript;
     javascript.Printf(wxT("document.body.scrollTop = %d;"), pos);
-    [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
+    [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxLDNSStringWithWxString( javascript )];
 }
 
 wxString wxWebKitCtrl::RunScript(const wxString& javascript){
     if ( !m_webView )
         return wxEmptyString;
 
-    id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
+    id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxLDNSStringWithWxString( javascript )];
 
     NSString* resultAsString;
     if ([result isKindOfClass:[NSNumber class]]){
@@ -429,7 +429,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 // destroyed. Therefore, we must be careful to check both the existence
 // of the Carbon control and the event handler before firing events.
 
-@implementation MyFrameLoadMonitor
+@implementation LDMyFrameLoadMonitor
 
 - (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
@@ -512,7 +512,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 }
 @end
 
-@implementation MyPolicyDelegate
+@implementation LDMyPolicyDelegate
 
 - (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
@@ -565,7 +565,7 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 @end
 
 
-@implementation MyUIDelegate
+@implementation LDMyUIDelegate
 
 - (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {

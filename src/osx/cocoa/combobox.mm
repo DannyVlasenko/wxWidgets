@@ -25,9 +25,9 @@
 
 // work in progress
 
-@interface wxNSTableDataSource : NSObject <NSComboBoxDataSource>
+@interface wxLDNSTableDataSource : NSObject <NSComboBoxDataSource>
 {
-    wxNSComboBoxControl* impl;
+    wxLDNSComboBoxControl* impl;
 }
 
 - (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox;
@@ -36,7 +36,7 @@
 @end
 
 
-@implementation wxNSComboBox
+@implementation wxLDNSComboBox
 
 + (void)initialize
 {
@@ -55,12 +55,12 @@
 }
 
 // Over-riding NSComboBox onKeyDown method doesn't work for key events.
-// Ensure that we can use our own wxNSTextFieldEditor to catch key events.
+// Ensure that we can use our own wxLDNSTextFieldEditor to catch key events.
 // See windowWillReturnFieldEditor in nonownedwnd.mm.
-// Key events will be caught and handled via wxNSTextFieldEditor onkey...
+// Key events will be caught and handled via wxLDNSTextFieldEditor onkey...
 // methods in textctrl.mm.
 
-- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
+- (void) setFieldEditor:(wxLDNSTextFieldEditor*) editor
 {
     if ( editor != fieldEditor )
     {
@@ -70,7 +70,7 @@
     }
 }
 
-- (wxNSTextFieldEditor*) fieldEditor
+- (wxLDNSTextFieldEditor*) fieldEditor
 {
     return fieldEditor;
 }
@@ -97,7 +97,7 @@
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
-        wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
+        wxLDNSTextFieldControl* timpl = dynamic_cast<wxLDNSTextFieldControl*>(impl);
         if ( timpl )
             timpl->UpdateInternalSelectionFromEditor(fieldEditor);
         impl->DoNotifyFocusLost();
@@ -199,17 +199,17 @@
 
 @end
 
-wxNSComboBoxControl::wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w )
-    : wxNSTextFieldControl(wxPeer, wxPeer, w)
+wxLDNSComboBoxControl::wxLDNSComboBoxControl( wxComboBox *wxPeer, WXWidget w )
+    : wxLDNSTextFieldControl(wxPeer, wxPeer, w)
 {
     m_comboBox = (NSComboBox*)w;
 }
 
-wxNSComboBoxControl::~wxNSComboBoxControl()
+wxLDNSComboBoxControl::~wxLDNSComboBoxControl()
 {
 }
 
-void wxNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
+void wxLDNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     // NSComboBox has its own event loop, which reacts very badly to our synthetic
     // events used to signal when a wxEvent is posted, so during that time we switch
@@ -233,12 +233,12 @@ void wxNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     }
 }
 
-int wxNSComboBoxControl::GetSelectedItem() const
+int wxLDNSComboBoxControl::GetSelectedItem() const
 {
     return [m_comboBox indexOfSelectedItem];
 }
 
-void wxNSComboBoxControl::SetSelectedItem(int item)
+void wxLDNSComboBoxControl::SetSelectedItem(int item)
 {
     SendEvents(false);
 
@@ -258,12 +258,12 @@ void wxNSComboBoxControl::SetSelectedItem(int item)
     SendEvents(true);
 }
 
-int wxNSComboBoxControl::GetNumberOfItems() const
+int wxLDNSComboBoxControl::GetNumberOfItems() const
 {
     return [m_comboBox numberOfItems];
 }
 
-void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
+void wxLDNSComboBoxControl::InsertItem(int pos, const wxString& item)
 {
     wxCFStringRef itemLabel(  item, m_wxPeer->GetFont().GetEncoding() );
     NSString* const cocoaStr = itemLabel.AsNSString();
@@ -284,14 +284,14 @@ void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
     [m_comboBox insertItemWithObjectValue:cocoaStr atIndex:pos];
 }
 
-void wxNSComboBoxControl::RemoveItem(int pos)
+void wxLDNSComboBoxControl::RemoveItem(int pos)
 {
     SendEvents(false);
     [m_comboBox removeItemAtIndex:pos];
     SendEvents(true);
 }
 
-void wxNSComboBoxControl::Clear()
+void wxLDNSComboBoxControl::Clear()
 {
     SendEvents(false);
     [m_comboBox removeAllItems];
@@ -299,12 +299,12 @@ void wxNSComboBoxControl::Clear()
     SendEvents(true);
 }
 
-wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const
+wxString wxLDNSComboBoxControl::GetStringAtIndex(int pos) const
 {
     return wxCFStringRef::AsString([m_comboBox itemObjectValueAtIndex:pos], m_wxPeer->GetFont().GetEncoding());
 }
 
-int wxNSComboBoxControl::FindString(const wxString& text) const
+int wxLDNSComboBoxControl::FindString(const wxString& text) const
 {
     NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 
@@ -316,19 +316,19 @@ int wxNSComboBoxControl::FindString(const wxString& text) const
     return result;
 }
 
-void wxNSComboBoxControl::Popup()
+void wxLDNSComboBoxControl::Popup()
 {
     id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
     [ax setAccessibilityExpanded: YES];
 }
 
-void wxNSComboBoxControl::Dismiss()
+void wxLDNSComboBoxControl::Dismiss()
 {
     id ax = NSAccessibilityUnignoredDescendant(m_comboBox);
     [ax setAccessibilityExpanded: NO];
 }
 
-void wxNSComboBoxControl::SetEditable(bool editable)
+void wxLDNSComboBoxControl::SetEditable(bool editable)
 {
     // TODO: unfortunately this does not work, setEditable just means the same as CB_READONLY
     // I don't see a way to access the text field directly
@@ -347,14 +347,14 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSComboBox* v = [[wxNSComboBox alloc] initWithFrame:r];
+    wxLDNSComboBox* v = [[wxLDNSComboBox alloc] initWithFrame:r];
     if (WX_IS_MACOS_AVAILABLE(10, 13))
         [v setNumberOfVisibleItems:999];
     else
         [v setNumberOfVisibleItems:13];
     if (style & wxCB_READONLY)
         [v setEditable:NO];
-    wxNSComboBoxControl* c = new wxNSComboBoxControl( wxpeer, v );
+    wxLDNSComboBoxControl* c = new wxLDNSComboBoxControl( wxpeer, v );
     return c;
 }
 

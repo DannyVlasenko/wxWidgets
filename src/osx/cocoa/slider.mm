@@ -15,12 +15,12 @@
 #include "wx/slider.h"
 #include "wx/osx/private.h"
 
-@interface wxNSSlider : NSSlider
+@interface wxLDNSSlider : NSSlider
 {
 }
 @end
 
-@implementation wxNSSlider
+@implementation wxLDNSSlider
 
 + (void)initialize
 {
@@ -96,7 +96,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
         else
             r.size.width = r.size.height * 2;
     }
-    wxNSSlider* v = [[wxNSSlider alloc] initWithFrame:r];
+    wxLDNSSlider* v = [[wxLDNSSlider alloc] initWithFrame:r];
 
     int tickMarks = 0;
     if ( style & wxSL_AUTOTICKS )

@@ -151,7 +151,7 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     return wxToNSRect( sv, bounds );
 }
 
-@interface wxNSView : NSView
+@interface wxLDNSView : NSView
 {
     BOOL _hasToolTip;    
     NSTrackingRectTag   _lastToolTipTrackTag;
@@ -160,9 +160,9 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     
 }
 
-@end // wxNSView
+@end // wxLDNSView
 
-@interface wxNSView(TextInput) <NSTextInputClient>
+@interface wxLDNSView(TextInput) <NSTextInputClient>
 
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
 - (void)doCommandBySelector:(SEL)aSelector;
@@ -830,7 +830,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
 }
 
-@implementation wxNSView
+@implementation wxLDNSView
 
 + (void)initialize
 {
@@ -966,7 +966,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     [super viewDidMoveToWindow];
 }
 
-@end // wxNSView
+@end // wxLDNSView
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
 // Currently, only insertText:(replacementRange:) is
@@ -974,7 +974,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 // It is hoped that someday IME-related functionality is implemented in
 // wxWidgets and the methods of this protocol are fully working.
 
-@implementation wxNSView(TextInput)
+@implementation wxLDNSView(TextInput)
 
 void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
@@ -1032,7 +1032,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
     return NSNotFound;
 }
 
-@end // wxNSView(TextInput)
+@end // wxLDNSView(TextInput)
 
 
 //
@@ -1350,8 +1350,8 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
 
     TODO:
     In order to respect wxDrag_DefaultMove, access to dnd.mm's
-    DropSourceDelegate will be needed which contains the wxDrag value used.
-    (The draggingSource method of sender points to a DropSourceDelegate* ).
+    LDDropSourceDelegate will be needed which contains the wxDrag value used.
+    (The draggingSource method of sender points to a LDDropSourceDelegate* ).
     */
     wxDragResult result = wxDragNone;
 
@@ -2231,7 +2231,7 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
     
-    // wxNSTextFields and wxNSComboBoxes have an editor as real responder, therefore they get
+    // wxLDNSTextFields and wxLDNSComboBoxes have an editor as real responder, therefore they get
     // a resign notification when their editor takes over, don't trigger  event here, the control
     // gets a controlTextDidEndEditing notification which will send a focus kill.
     if ( r && !m_hasEditor)
@@ -2656,7 +2656,7 @@ double wxWidgetCocoaImpl::GetContentScaleFactor() const
 // ----------------------------------------------------------------------------
 
 // define a delegate used to refresh the window during animation
-@interface wxNSAnimationDelegate : NSObject <NSAnimationDelegate>
+@interface wxLDNSAnimationDelegate : NSObject <NSAnimationDelegate>
 {
     wxWindow *m_win;
     bool m_isDone;
@@ -2672,7 +2672,7 @@ double wxWidgetCocoaImpl::GetContentScaleFactor() const
         didReachProgressMark:(NSAnimationProgress)progress;
 @end
 
-@implementation wxNSAnimationDelegate
+@implementation wxLDNSAnimationDelegate
 
 - (id)init:(wxWindow *)win
 {
@@ -2837,8 +2837,8 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     for ( float f = 1./NUM_LAYOUTS; f < 1.; f += 1./NUM_LAYOUTS )
         [anim addProgressMark:f];
 
-    wxNSAnimationDelegate * const
-        animDelegate = [[wxNSAnimationDelegate alloc] init:win];
+    wxLDNSAnimationDelegate * const
+        animDelegate = [[wxLDNSAnimationDelegate alloc] init:win];
     [anim setDelegate:animDelegate];
     [anim startAnimation];
 
@@ -3143,7 +3143,7 @@ bool wxWidgetCocoaImpl::CanFocus() const
         // It's useless to call canBecomeKeyView in this case, it will always
         // return false. Try to return something reasonable ourselves, knowing
         // that most controls are not focusable when full keyboard access if
-        // off and wxNSTextViewControl overrides CanFocus() to always return
+        // off and wxLDNSTextViewControl overrides CanFocus() to always return
         // true anyhow.
         return [NSApp isFullKeyboardAccessEnabled];
     }
@@ -3946,7 +3946,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     long WXUNUSED(style), long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSView* v = [[wxNSView alloc] initWithFrame:r];
+    wxLDNSView* v = [[wxLDNSView alloc] initWithFrame:r];
 
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
     return c;
@@ -3971,7 +3971,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     }
     else
     {
-        wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
+        wxLDNSView* v = [[wxLDNSView alloc] initWithFrame:[[tlw contentView] frame]];
         c = new wxWidgetCocoaImpl( now, v, Widget_IsRoot );
         c->InstallEventHandler();
         [tlw setContentView:v];

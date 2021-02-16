@@ -49,10 +49,10 @@ static const int MINIMUM_NATIVE_ROW_HEIGHT = 17;
 // ============================================================================
 
 // ============================================================================
-// wxPointerObject
+// wxLDPointerObject
 // ============================================================================
 
-@implementation wxPointerObject
+@implementation wxLDPointerObject
 
 -(id) init
 {
@@ -76,8 +76,8 @@ static const int MINIMUM_NATIVE_ROW_HEIGHT = 17;
 -(BOOL) isEqual:(id)object
 {
     return (object != nil) &&
-             ([object isKindOfClass:[wxPointerObject class]]) &&
-                 (pointer == [((wxPointerObject*) object) pointer]);
+             ([object isKindOfClass:[wxLDPointerObject class]]) &&
+                 (pointer == [((wxLDPointerObject*) object) pointer]);
 }
 
 -(NSUInteger) hash
@@ -102,7 +102,7 @@ namespace
 
 inline wxDataViewItem wxDataViewItemFromItem(id item)
 {
-    return wxDataViewItem([static_cast<wxPointerObject *>(item) pointer]);
+    return wxDataViewItem([static_cast<wxLDPointerObject *>(item) pointer]);
 }
 
 inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
@@ -113,10 +113,10 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
-// wxCustomRendererObject
+// wxLDCustomRendererObject
 // ----------------------------------------------------------------------------
 
-@interface wxCustomRendererObject : NSObject <NSCopying>
+@interface wxLDCustomRendererObject : NSObject <NSCopying>
 {
 @public
     wxDataViewCustomRenderer* customRenderer; // not owned by the class
@@ -126,7 +126,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     -(id) initWithRenderer:(wxDataViewCustomRenderer*)renderer;
 @end
 
-@implementation wxCustomRendererObject
+@implementation wxLDCustomRendererObject
 
 -(id) init
 {
@@ -150,7 +150,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 
 -(id) copyWithZone:(NSZone*)zone
 {
-    wxCustomRendererObject* copy;
+    wxLDCustomRendererObject* copy;
 
     copy = [[[self class] allocWithZone:zone] init];
     copy->customRenderer = customRenderer;
@@ -160,10 +160,10 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 @end
 
 // ----------------------------------------------------------------------------
-// wxDVCNSTableColumn: exists only to override NSTableColumn:dataCellForRow:
+// wxLDDVCNSTableColumn: exists only to override NSTableColumn:dataCellForRow:
 // ----------------------------------------------------------------------------
 
-@interface wxDVCNSTableColumn : NSTableColumn
+@interface wxLDDVCNSTableColumn : NSTableColumn
 {
 }
 
@@ -183,7 +183,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     -(id) dataCellForRow:(NSInteger)row;
 @end
 
-@implementation wxDVCNSTableColumn
+@implementation wxLDDVCNSTableColumn
 
 +(NSString*) identifierForColumnPointer:(const wxDataViewColumn*)column
 {
@@ -197,7 +197,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 
 -(id) initWithColumnPointer:(const wxDataViewColumn*)column
 {
-    self = [self initWithIdentifier: [wxDVCNSTableColumn identifierForColumnPointer:column]];
+    self = [self initWithIdentifier: [wxLDDVCNSTableColumn identifierForColumnPointer:column]];
     return self;
 }
 
@@ -319,8 +319,8 @@ NSInteger CompareItems(id item1, id item2, void* context)
     NSInteger result = NSOrderedSame;
     for ( NSUInteger i = 0; i < count && result == NSOrderedSame; ++i )
     {
-        wxSortDescriptorObject* const
-            sortDescriptor = (wxSortDescriptorObject*)
+        wxLDSortDescriptorObject* const
+            sortDescriptor = (wxLDSortDescriptorObject*)
                 [sortDescriptors objectAtIndex:i];
 
         int rc = [sortDescriptor modelPtr]->Compare
@@ -356,8 +356,8 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
 
     wxCHECK_MSG( renderer, NULL, "column should have a renderer" );
 
-    wxDVCNSTableColumn * const nativeColumn(
-        [[wxDVCNSTableColumn alloc] initWithColumnPointer: column]
+    wxLDDVCNSTableColumn * const nativeColumn(
+        [[wxLDDVCNSTableColumn alloc] initWithColumnPointer: column]
     );
 
     // setting the size related parameters:
@@ -427,10 +427,10 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer,
 }
 
 // ============================================================================
-// wxSortDescriptorObject
+// wxLDSortDescriptorObject
 // ============================================================================
 
-@implementation wxSortDescriptorObject
+@implementation wxLDSortDescriptorObject
 -(id) init
 {
     self = [super init];
@@ -458,7 +458,7 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
 
 -(id) copyWithZone:(NSZone*)zone
 {
-    wxSortDescriptorObject* copy;
+    wxLDSortDescriptorObject* copy;
 
 
     copy = [super copyWithZone:zone];
@@ -494,9 +494,9 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
 @end
 
 // ============================================================================
-// wxCocoaOutlineDataSource
+// wxLDCocoaOutlineDataSource
 // ============================================================================
-@implementation wxCocoaOutlineDataSource
+@implementation wxLDCocoaOutlineDataSource
 
 //
 // constructors / destructor
@@ -617,7 +617,7 @@ outlineView:(NSOutlineView*)outlineView
     wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
 
     wxDataViewColumn* const
-        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
     const unsigned colIdx = col->GetModelColumn();
 
     wxDataViewItem dataViewItem(wxDataViewItemFromItem(item));
@@ -646,7 +646,7 @@ outlineView:(NSOutlineView*)outlineView
         return;
 
     wxDataViewColumn* const
-        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
     col->GetRenderer()->
         OSXOnCellChanged(object, wxDataViewItemFromItem(item), col->GetModelColumn());
@@ -668,7 +668,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
 
-    // convert NSSortDescriptors to wxSortDescriptorObjects:
+    // convert NSSortDescriptors to wxLDSortDescriptorObjects:
     newDescriptors    = [outlineView sortDescriptors];
     noOfDescriptors   = [newDescriptors count];
     wxSortDescriptors = [NSMutableArray arrayWithCapacity:noOfDescriptors];
@@ -679,11 +679,11 @@ outlineView:(NSOutlineView*)outlineView
 
         sortingColumn->SetSortOrderVariable([newDescriptor ascending]);
 
-        [wxSortDescriptors addObject:[[[wxSortDescriptorObject alloc] initWithModelPtr:model
+        [wxSortDescriptors addObject:[[[wxLDSortDescriptorObject alloc] initWithModelPtr:model
             sortingColumnPtr:sortingColumn
             ascending:[newDescriptor ascending]] autorelease]];
     }
-    [(wxCocoaOutlineDataSource*)[outlineView dataSource] setSortDescriptors:wxSortDescriptors];
+    [(wxLDCocoaOutlineDataSource*)[outlineView dataSource] setSortDescriptors:wxSortDescriptors];
 
     // send first the event to wxWidgets that the sorting has changed so that
     // the program can do special actions before the sorting actually starts:
@@ -982,7 +982,7 @@ outlineView:(NSOutlineView*)outlineView
 //
 // buffer handling
 //
--(void) addToBuffer:(wxPointerObject*)item
+-(void) addToBuffer:(wxLDPointerObject*)item
 {
     [items addObject:item];
 }
@@ -992,22 +992,22 @@ outlineView:(NSOutlineView*)outlineView
     [items removeAllObjects];
 }
 
--(wxPointerObject*) getDataViewItemFromBuffer:(const wxDataViewItem&)item
+-(wxLDPointerObject*) getDataViewItemFromBuffer:(const wxDataViewItem&)item
 {
-    return [items member:[[[wxPointerObject alloc] initWithPointer:item.GetID()] autorelease]];
+    return [items member:[[[wxLDPointerObject alloc] initWithPointer:item.GetID()] autorelease]];
 }
 
--(wxPointerObject*) getItemFromBuffer:(wxPointerObject*)item
+-(wxLDPointerObject*) getItemFromBuffer:(wxLDPointerObject*)item
 {
     return [items member:item];
 }
 
--(BOOL) isInBuffer:(wxPointerObject*)item
+-(BOOL) isInBuffer:(wxLDPointerObject*)item
 {
     return [items containsObject:item];
 }
 
--(void) removeFromBuffer:(wxPointerObject*)item
+-(void) removeFromBuffer:(wxLDPointerObject*)item
 {
     [items removeObject:item];
 }
@@ -1020,7 +1020,7 @@ outlineView:(NSOutlineView*)outlineView
     [children removeAllObjects];
 }
 
--(wxPointerObject*) getChild:(NSUInteger)index
+-(wxLDPointerObject*) getChild:(NSUInteger)index
 {
     return [children objectAtIndex:index];
 }
@@ -1058,7 +1058,7 @@ outlineView:(NSOutlineView*)outlineView
 //
 // access to wxWidget's implementation
 //
--(wxPointerObject*) currentParentItem
+-(wxLDPointerObject*) currentParentItem
 {
     return currentParentItem;
 }
@@ -1073,7 +1073,7 @@ outlineView:(NSOutlineView*)outlineView
     return model;
 }
 
--(void) setCurrentParentItem:(wxPointerObject*)newCurrentParentItem
+-(void) setCurrentParentItem:(wxLDPointerObject*)newCurrentParentItem
 {
     [newCurrentParentItem retain];
     [currentParentItem release];
@@ -1093,7 +1093,7 @@ outlineView:(NSOutlineView*)outlineView
 //
 // other methods
 //
--(void) bufferItem:(wxPointerObject*)parentItem withChildren:(wxDataViewItemArray*)dataViewChildrenPtr
+-(void) bufferItem:(wxLDPointerObject*)parentItem withChildren:(wxDataViewItemArray*)dataViewChildrenPtr
 {
     NSInteger const noOfChildren = (*dataViewChildrenPtr).GetCount();
 
@@ -1101,8 +1101,8 @@ outlineView:(NSOutlineView*)outlineView
     [self clearChildren];
     for (NSInteger indexChild=0; indexChild<noOfChildren; ++indexChild)
     {
-        wxPointerObject* bufferedPointerObject;
-        wxPointerObject* newPointerObject([[wxPointerObject alloc] initWithPointer:(*dataViewChildrenPtr)[indexChild].GetID()]);
+        wxLDPointerObject* bufferedPointerObject;
+        wxLDPointerObject* newPointerObject([[wxLDPointerObject alloc] initWithPointer:(*dataViewChildrenPtr)[indexChild].GetID()]);
 
         // The next statement and test looks strange but there is
         // unfortunately no workaround: due to the fact that two pointer
@@ -1131,10 +1131,10 @@ outlineView:(NSOutlineView*)outlineView
 @end
 
 // ============================================================================
-// wxCustomCell
+// wxLDCustomCell
 // ============================================================================
 
-@implementation wxCustomCell
+@implementation wxLDCustomCell
 
 #if 0 // starting implementation for custom cell clicks
 
@@ -1155,8 +1155,8 @@ outlineView:(NSOutlineView*)outlineView
 
 -(NSSize) cellSize
 {
-    wxCustomRendererObject * const
-        obj = static_cast<wxCustomRendererObject *>([self objectValue]);
+    wxLDCustomRendererObject * const
+        obj = static_cast<wxLDCustomRendererObject *>([self objectValue]);
 
 
     const wxSize size = obj->customRenderer->GetSize();
@@ -1168,8 +1168,8 @@ outlineView:(NSOutlineView*)outlineView
 //
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
 {
-    wxCustomRendererObject * const
-        obj = static_cast<wxCustomRendererObject *>([self objectValue]);
+    wxLDCustomRendererObject * const
+        obj = static_cast<wxLDCustomRendererObject *>([self objectValue]);
     if ( !obj )
     {
         // this may happen for the custom cells in container rows: they don't
@@ -1215,9 +1215,9 @@ outlineView:(NSOutlineView*)outlineView
 @end
 
 // ============================================================================
-// wxImageCell
+// wxLDImageCell
 // ============================================================================
-@implementation wxImageCell
+@implementation wxLDImageCell
 
 -(NSSize) cellSize
 {
@@ -1230,10 +1230,10 @@ outlineView:(NSOutlineView*)outlineView
 @end
 
 // ============================================================================
-// wxTextFieldCell
+// wxLDTextFieldCell
 // ============================================================================
 
-@implementation wxTextFieldCell
+@implementation wxLDTextFieldCell
 
 - (void)setWXAlignment:(int)alignment
 {
@@ -1301,9 +1301,9 @@ outlineView:(NSOutlineView*)outlineView
 
 
 // ============================================================================
-// wxImageTextCell
+// wxLDImageTextCell
 // ============================================================================
-@implementation wxImageTextCell
+@implementation wxLDImageTextCell
 //
 // initialization
 //
@@ -1325,10 +1325,10 @@ outlineView:(NSOutlineView*)outlineView
 
 -(id) copyWithZone:(NSZone*)zone
 {
-    wxImageTextCell* cell;
+    wxLDImageTextCell* cell;
 
 
-    cell = (wxImageTextCell*) [super copyWithZone:zone];
+    cell = (wxLDImageTextCell*) [super copyWithZone:zone];
     cell->image          = [image retain];
     cell->imageSize      = imageSize;
     cell->spaceImageText = spaceImageText;
@@ -1628,9 +1628,9 @@ outlineView:(NSOutlineView*)outlineView
 @end
 
 // ============================================================================
-// wxCocoaOutlineView
+// wxLDCocoaOutlineView
 // ============================================================================
-@implementation wxCocoaOutlineView
+@implementation wxLDCocoaOutlineView
 
 //
 // initializers / destructor
@@ -1762,7 +1762,7 @@ outlineView:(NSOutlineView*)outlineView
 -(void) outlineView:(NSOutlineView*)outlineView didClickTableColumn:(NSTableColumn*)tableColumn
 {
     wxDataViewColumn* const
-        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1802,7 +1802,7 @@ outlineView:(NSOutlineView*)outlineView
     // Implements per-column reordering in NSTableView per Apple's Q&A:
     // https://developer.apple.com/library/content/qa/qa1503/_index.html
     wxDataViewColumn* const
-        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
     [outlineView setAllowsColumnReordering:col->IsReorderable()];
 }
 
@@ -1849,7 +1849,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewModel * const model = dvc->GetModel();
 
     wxDataViewColumn* const
-        dvCol([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        dvCol([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
     const unsigned colIdx = dvCol->GetModelColumn();
 
     wxDataViewItem dvItem(wxDataViewItemFromItem(item));
@@ -1883,7 +1883,7 @@ outlineView:(NSOutlineView*)outlineView
     NSTableColumn*
         tableColumn = [[self tableColumns] objectAtIndex:newColumnPosition];
     wxDataViewColumn* const
-        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1930,7 +1930,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
 
     NSTableColumn* tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
-    wxDataViewColumn* const col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+    wxDataViewColumn* const col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
     // Before doing anything we send an event asking if editing of this item is really wanted.
@@ -1959,7 +1959,7 @@ outlineView:(NSOutlineView*)outlineView
     NSTableColumn*
         tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
     wxDataViewColumn* const
-        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+        col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -2003,7 +2003,7 @@ outlineView:(NSOutlineView*)outlineView
         NSTableColumn*
             tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
         wxDataViewColumn* const
-            col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+            col([static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
         wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -2045,7 +2045,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init])
+      m_OutlineView([[wxLDCocoaOutlineView alloc] init])
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2103,7 +2103,7 @@ bool wxCocoaDataViewControl::ClearColumns()
 
     [m_OutlineView removeFromSuperviewWithoutNeedingDisplay];
     [m_OutlineView release];
-    m_OutlineView = [[wxCocoaOutlineView alloc] init];
+    m_OutlineView = [[wxLDCocoaOutlineView alloc] init];
     [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
     [m_OutlineView setDataSource:m_DataSource];
 
@@ -2120,7 +2120,7 @@ bool wxCocoaDataViewControl::DeleteColumn(wxDataViewColumn* columnPtr)
         [m_OutlineView setOutlineTableColumn:nil]; // due to a bug this does not work
     [m_OutlineView removeTableColumn:columnPtr->GetNativeData()->GetNativeColumnPtr()]; // due to a confirmed bug #6555162 the deletion does not work for
     // outline table columns (... and there is no workaround)
-    return (([m_OutlineView columnWithIdentifier:[wxDVCNSTableColumn identifierForColumnPointer:columnPtr]]) == -1);
+    return (([m_OutlineView columnWithIdentifier:[wxLDDVCNSTableColumn identifierForColumnPointer:columnPtr]]) == -1);
 }
 
 void wxCocoaDataViewControl::DoSetExpanderColumn(const wxDataViewColumn *columnPtr)
@@ -2131,12 +2131,12 @@ void wxCocoaDataViewControl::DoSetExpanderColumn(const wxDataViewColumn *columnP
 wxDataViewColumn* wxCocoaDataViewControl::GetColumn(unsigned int pos) const
 {
     NSTableColumn* tableColumn = [[m_OutlineView tableColumns] objectAtIndex:pos];
-    return [static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer];
+    return [static_cast<wxLDDVCNSTableColumn*>(tableColumn) getColumnPointer];
 }
 
 int wxCocoaDataViewControl::GetColumnPosition(const wxDataViewColumn *columnPtr) const
 {
-    return [m_OutlineView columnWithIdentifier:[wxDVCNSTableColumn identifierForColumnPointer:columnPtr]];
+    return [m_OutlineView columnWithIdentifier:[wxLDDVCNSTableColumn identifierForColumnPointer:columnPtr]];
 }
 
 bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
@@ -2170,7 +2170,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     class MaxWidthCalculator
     {
     public:
-        MaxWidthCalculator(wxCocoaOutlineView *view,
+        MaxWidthCalculator(wxLDCocoaOutlineView *view,
                            NSTableColumn *column, unsigned columnIndex)
             : m_width(0),
               m_view(view),
@@ -2202,7 +2202,7 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 
     private:
         int m_width;
-        wxCocoaOutlineView *m_view;
+        wxLDCocoaOutlineView *m_view;
         unsigned m_column;
         int m_indent;
     };
@@ -2427,7 +2427,7 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
     [m_DataSource release];
     if (model)
     {
-        m_DataSource = [[wxCocoaOutlineDataSource alloc] init];
+        m_DataSource = [[wxLDCocoaOutlineDataSource alloc] init];
         [m_DataSource setImplementation:this];
         [m_DataSource setModel:model];
     }
@@ -2786,7 +2786,7 @@ void wxDataViewRenderer::OSXUpdateAlignment()
     NSCell *cell = GetNativeData()->GetColumnCell();
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     if ([cell respondsToSelector:@selector(setWXAlignment:)])
-        [(wxTextFieldCell*)cell setWXAlignment:align];
+        [(wxLDTextFieldCell*)cell setWXAlignment:align];
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
@@ -2977,14 +2977,14 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(const wxString& varianttype,
       m_editorCtrlPtr(NULL),
       m_DCPtr(NULL)
 {
-    wxCustomCell* cell = [[wxCustomCell alloc] init];
+    wxLDCustomCell* cell = [[wxLDCustomCell alloc] init];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
 
 bool wxDataViewCustomRenderer::MacRender()
 {
-    [GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this] autorelease]];
+    [GetNativeData()->GetItemCell() setObjectValue:[[[wxLDCustomRendererObject alloc] initWithRenderer:this] autorelease]];
     return true;
 }
 
@@ -3005,7 +3005,7 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(const wxString& varianttype,
     NSTextFieldCell* cell;
 
 
-    cell = [[wxTextFieldCell alloc] init];
+    cell = [[wxLDTextFieldCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
@@ -3083,7 +3083,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(const wxString& varianttype,
                                                    int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
-    NSCell* cell = [[wxImageCell alloc] init];
+    NSCell* cell = [[wxLDImageCell alloc] init];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
@@ -3232,7 +3232,7 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(const wxString& varianttype,
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
-    cell = [[wxTextFieldCell alloc] init];
+    cell = [[wxLDTextFieldCell alloc] init];
     [cell setFormatter:dateFormatter];
     NSCalendar* calendar = [NSCalendar currentCalendar];
     NSDate* date = [calendar dateWithEra:1 year:2000 month:12 day:30 hour:20 minute:0 second:0 nanosecond:0];
@@ -3312,10 +3312,10 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(const wxString& variantty
                                                        int align)
      : wxDataViewRenderer(varianttype,mode)
 {
-    wxImageTextCell* cell;
+    wxLDImageTextCell* cell;
 
 
-    cell = [[wxImageTextCell alloc] init];
+    cell = [[wxLDImageTextCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
@@ -3325,9 +3325,9 @@ bool wxDataViewIconTextRenderer::MacRender()
 {
     wxDataViewIconText iconText;
 
-    wxImageTextCell* cell;
+    wxLDImageTextCell* cell;
 
-    cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
+    cell = (wxLDImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
     if (iconText.GetIcon().IsOk())
         [cell setImage:wxBitmap(iconText.GetIcon()).GetNSImage()];
@@ -3397,13 +3397,13 @@ void wxDataViewCheckIconTextRenderer::Allow3rdStateForUser(bool allow)
     m_allow3rdStateForUser = allow;
 }
 
-@interface wxNSTextAttachmentCellWithBaseline : NSTextAttachmentCell
+@interface wxLDNSTextAttachmentCellWithBaseline : NSTextAttachmentCell
 {
 NSPoint _offset;
 }
 @end
 
-@implementation wxNSTextAttachmentCellWithBaseline
+@implementation wxLDNSTextAttachmentCellWithBaseline
 
 - (void) setCellBaselineOffset:(NSPoint) offset
 {
@@ -3444,8 +3444,8 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
     const wxIcon& icon = checkIconText.GetIcon();
     if ( icon.IsOk() )
     {
-        wxNSTextAttachmentCellWithBaseline* const attachmentCell =
-            [[wxNSTextAttachmentCellWithBaseline alloc] initImageCell: icon.GetNSImage()];
+        wxLDNSTextAttachmentCellWithBaseline* const attachmentCell =
+            [[wxLDNSTextAttachmentCellWithBaseline alloc] initImageCell: icon.GetNSImage()];
         NSTextAttachment* const attachment = [NSTextAttachment new];
         [attachment setAttachmentCell: attachmentCell];
 

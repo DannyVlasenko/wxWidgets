@@ -14,22 +14,22 @@
 #include "wx/combobox.h"
 #include "wx/osx/private.h"
 
-@class wxTextEntryFormatter;
+@class wxLDTextEntryFormatter;
 
-class wxNSTextBase : public wxWidgetCocoaImpl, public wxTextWidgetImpl
+class wxLDNSTextBase : public wxWidgetCocoaImpl, public wxTextWidgetImpl
 {
 public :
-    wxNSTextBase( wxTextCtrl *text, WXWidget w )
+    wxLDNSTextBase( wxTextCtrl *text, WXWidget w )
         : wxWidgetCocoaImpl(text, w),
           wxTextWidgetImpl(text)
     {
     }
-    wxNSTextBase( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w )
+    wxLDNSTextBase( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w )
         : wxWidgetCocoaImpl(wxPeer, w),
           wxTextWidgetImpl(entry)
     {
     }
-    virtual ~wxNSTextBase() { }
+    virtual ~wxLDNSTextBase() { }
 
     virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const wxOVERRIDE;
 
@@ -42,16 +42,16 @@ public :
 
 // implementation exposed, so that search control can pull it
 
-class wxNSTextFieldControl : public wxNSTextBase
+class wxLDNSTextFieldControl : public wxLDNSTextBase
 {
 public :
-    // wxNSTextFieldControl must always be associated with a wxTextEntry. If
+    // wxLDNSTextFieldControl must always be associated with a wxTextEntry. If
     // it's associated with a wxTextCtrl then we can get the associated entry
     // from it but otherwise the second ctor should be used to explicitly pass
     // us the entry.
-    wxNSTextFieldControl( wxTextCtrl *text, WXWidget w );
-    wxNSTextFieldControl( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w );
-    virtual ~wxNSTextFieldControl();
+    wxLDNSTextFieldControl( wxTextCtrl *text, WXWidget w );
+    wxLDNSTextFieldControl( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w );
+    virtual ~wxLDNSTextFieldControl();
 
     virtual bool CanClipMaxLength() const wxOVERRIDE { return true; }
     virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
@@ -82,7 +82,7 @@ public :
     virtual bool resignFirstResponder(WXWidget slf, void *_cmd) wxOVERRIDE;
 
     virtual void SetInternalSelection( long from , long to );
-    virtual void UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* editor);
+    virtual void UpdateInternalSelectionFromEditor( wxLDNSTextFieldEditor* editor);
 protected :
     NSTextField* m_textField;
     long m_selStart;
@@ -93,14 +93,14 @@ private:
     void Init(WXWidget w);
 
     // Get our formatter, creating it if necessary.
-    wxTextEntryFormatter* GetFormatter();
+    wxLDTextEntryFormatter* GetFormatter();
 };
 
-class wxNSTextViewControl : public wxNSTextBase
+class wxLDNSTextViewControl : public wxLDNSTextBase
 {
 public:
-    wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style );
-    virtual ~wxNSTextViewControl();
+    wxLDNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style );
+    virtual ~wxLDNSTextViewControl();
 
     virtual void insertText(NSString* text, WXWidget slf, void *_cmd) wxOVERRIDE;
 
@@ -144,11 +144,11 @@ protected:
     bool m_useCharWrapping;
 };
 
-class wxNSComboBoxControl : public wxNSTextFieldControl, public wxComboWidgetImpl
+class wxLDNSComboBoxControl : public wxLDNSTextFieldControl, public wxComboWidgetImpl
 {
 public :
-    wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w );
-    virtual ~wxNSComboBoxControl();
+    wxLDNSComboBoxControl( wxComboBox *wxPeer, WXWidget w );
+    virtual ~wxLDNSComboBoxControl();
 
     virtual int GetSelectedItem() const;
     virtual void SetSelectedItem(int item);

@@ -268,7 +268,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     return wxDragNone;
 }
 
-@interface DropSourceDelegate : NSObject<NSDraggingSource>
+@interface LDDropSourceDelegate : NSObject<NSDraggingSource>
 {
     BOOL dragFinished;
     int resultCode;
@@ -286,7 +286,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
 @end
 
-@implementation DropSourceDelegate
+@implementation LDDropSourceDelegate
 
 - (id)init
 {
@@ -435,7 +435,7 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
 typedef NSString* NSPasteboardType;
 #endif
 
-@interface wxPasteBoardWriter : NSObject<NSPasteboardWriting>
+@interface wxLDPasteBoardWriter : NSObject<NSPasteboardWriting>
 {
     wxDataObject* m_data;
 }
@@ -443,7 +443,7 @@ typedef NSString* NSPasteboardType;
 - (id) initWithDataObject:(wxDataObject*) obj;
 @end
 
-@implementation wxPasteBoardWriter
+@implementation wxLDPasteBoardWriter
 
 - (id) initWithDataObject:(wxDataObject*) obj
 {
@@ -495,7 +495,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         gCurrentSource = this;
 
-        DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
+        LDDropSourceDelegate* delegate = [[LDDropSourceDelegate alloc] init];
         [delegate setImplementation:this flags:flags];
 
         // add a dummy square as dragged image for the moment,
@@ -516,7 +516,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         NSPoint down = [theEvent locationInWindow];
         NSPoint p = [view convertPoint:down fromView:nil];
 
-        wxPasteBoardWriter* writer = [[wxPasteBoardWriter alloc] initWithDataObject:m_data];
+        wxLDPasteBoardWriter* writer = [[wxLDPasteBoardWriter alloc] initWithDataObject:m_data];
         wxCFMutableArrayRef<NSDraggingItem*> items;
         NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:writer];
         [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];

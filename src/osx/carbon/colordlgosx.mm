@@ -38,10 +38,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 #import <AppKit/AppKit.h>
 
 // ---------------------------------------------------------------------------
-// wxCPWCDelegate - Window Closed delegate
+// wxLDCPWCDelegate - Window Closed delegate
 // ---------------------------------------------------------------------------
 
-@interface wxCPWCDelegate : NSObject <NSWindowDelegate>
+@interface wxLDCPWCDelegate : NSObject <NSWindowDelegate>
 {
     bool m_bIsClosed;
 }
@@ -50,9 +50,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 - (id)init;
 - (BOOL)windowShouldClose:(id)sender;
 - (BOOL)isClosed;
-@end // interface wxNSFontPanelDelegate : NSObject
+@end // interface wxLDNSFontPanelDelegate : NSObject
 
-@implementation wxCPWCDelegate : NSObject
+@implementation wxLDCPWCDelegate : NSObject
 
 - (id)init
 {
@@ -79,7 +79,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
     return m_bIsClosed;
 }
 
-@end // wxNSFontPanelDelegate
+@end // wxLDNSFontPanelDelegate
 
 /*
  * wxColourDialog
@@ -134,7 +134,7 @@ int wxColourDialog::ShowModal()
 
     //Create and assign the delegates (cocoa event handlers) so
     //we can tell if a window has closed/open or not
-    wxCPWCDelegate* theCPDelegate = [[wxCPWCDelegate alloc] init];
+    wxLDCPWCDelegate* theCPDelegate = [[wxLDCPWCDelegate alloc] init];
     [theColorPanel setDelegate:theCPDelegate];
 
             //

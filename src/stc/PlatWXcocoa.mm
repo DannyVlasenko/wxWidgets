@@ -16,7 +16,7 @@
 
 // A simple view used for popup windows.
 
-@interface wxSTCPopupBaseView : NSView
+@interface wxLDSTCPopupBaseView : NSView
 {
 @private
     NSTrackingArea * m_trackingArea;
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation wxSTCPopupBaseView
+@implementation wxLDSTCPopupBaseView
 
 - (id)initWithwxWin:(wxWindow*) wxWin
 {
@@ -104,7 +104,7 @@ WX_NSWindow CreateFloatingWindow(wxWindow* wxWin)
                                                   defer: NO];
     [w setLevel:NSFloatingWindowLevel];
     [w setHasShadow:YES];
-    [w setContentView:[[wxSTCPopupBaseView alloc] initWithwxWin:wxWin]];
+    [w setContentView:[[wxLDSTCPopupBaseView alloc] initWithwxWin:wxWin]];
 
     return w;
 }

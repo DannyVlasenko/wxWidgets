@@ -32,12 +32,12 @@
 
 #include "wx/osx/private.h"
 
-@interface wxStaticBitmapView : NSImageView
+@interface wxLDStaticBitmapView : NSImageView
 {
 }
 @end
 
-@implementation wxStaticBitmapView
+@implementation wxLDStaticBitmapView
 
 + (void)initialize
 {
@@ -75,7 +75,7 @@ public :
 
     void SetScaleMode(wxStaticBitmap::ScaleMode scaleMode)
     {
-        wxStaticBitmapView* v = (wxStaticBitmapView*) m_osxView;
+        wxLDStaticBitmapView* v = (wxLDStaticBitmapView*) m_osxView;
 
         NSImageScaling scaling = NSImageScaleNone;
         switch ( scaleMode )
@@ -116,7 +116,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticBitmap( wxWindowMac* wxpeer,
                                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxStaticBitmapView* v = [[wxStaticBitmapView alloc] initWithFrame:r];
+    wxLDStaticBitmapView* v = [[wxLDStaticBitmapView alloc] initWithFrame:r];
 
     wxWidgetCocoaImpl* c = new wxStaticBitmapCocoaImpl( wxpeer, v );
     return c;

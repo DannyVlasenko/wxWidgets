@@ -3,7 +3,7 @@
 <plist version="0.9">
 <dict>
 	<key>NSPrincipalClass</key>
-	<string>wxNSApplication</string>
+	<string>wxLDNSApplication</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleIdentifier</key>

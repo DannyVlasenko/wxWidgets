@@ -30,7 +30,7 @@ class wxCocoaDataViewControl;
             |                  \                /                    |
             |                   \              /                     |
             v                   \/            \/                     v
-     wxDataViewCtrl -------> wxCocoaDataViewControl <-------> wxCocoaOutlineView
+     wxDataViewCtrl -------> wxCocoaDataViewControl <-------> wxLDCocoaOutlineView
 
 
      The right most classes are Objective-C only and can't be used from (pure)
@@ -38,14 +38,14 @@ class wxCocoaDataViewControl;
  */
 
 // ============================================================================
-// wxPointerObject: simply stores a pointer, without taking its ownership
+// wxLDPointerObject: simply stores a pointer, without taking its ownership
 // ============================================================================
 
 // Two pointer objects are equal if the containing pointers are equal. This
 // means also that the hash value of a pointer object depends only on the
 // stored pointer.
 
-@interface wxPointerObject : NSObject
+@interface wxLDPointerObject : NSObject
 {
     void* pointer;
 }
@@ -57,10 +57,10 @@ class wxCocoaDataViewControl;
 @end
 
 // ============================================================================
-// wxSortDescriptorObject: helper class to use native sorting facilities
+// wxLDSortDescriptorObject: helper class to use native sorting facilities
 // ============================================================================
 
-@interface wxSortDescriptorObject : NSSortDescriptor<NSCopying>
+@interface wxLDSortDescriptorObject : NSSortDescriptor<NSCopying>
 {
     wxDataViewColumn* columnPtr; // pointer to the sorting column
 
@@ -178,7 +178,7 @@ public:
 
     // The original cell font and text colour stored here are NULL by default
     // and are only initialized to the values retrieved from the cell when we
-    // change them from wxCocoaOutlineView:willDisplayCell:forTableColumn:item:
+    // change them from wxLDCocoaOutlineView:willDisplayCell:forTableColumn:item:
     // which calls our SaveOriginalXXX() methods before changing the cell
     // attributes.
     //
@@ -241,7 +241,7 @@ private:
 };
 
 // ============================================================================
-// wxCocoaOutlineDataSource
+// wxLDCocoaOutlineDataSource
 // ============================================================================
 
 // This class implements the data source delegate for the outline view.
@@ -263,7 +263,7 @@ private:
 // owned by the set. Furthermore, children of the last parent are stored
 // in a linear list.
 //
-@interface wxCocoaOutlineDataSource : NSObject <NSOutlineViewDataSource>
+@interface wxLDCocoaOutlineDataSource : NSObject <NSOutlineViewDataSource>
 {
     // descriptors specifying the sorting (currently the array only holds one
     // object only)
@@ -278,7 +278,7 @@ private:
     wxDataViewModel* model;
 
     // parent of the buffered children; the object is owned
-    wxPointerObject* currentParentItem;
+    wxLDPointerObject* currentParentItem;
 }
 
     // methods of informal protocol:
@@ -318,18 +318,18 @@ private:
         toPasteboard:(NSPasteboard*)pasteboard;
 
     // buffer for items handling
-    -(void)             addToBuffer:(wxPointerObject*)item;
+    -(void)             addToBuffer:(wxLDPointerObject*)item;
     -(void)             clearBuffer;
     // returns the item in the buffer that has got the same pointer as "item",
     // if such an item does not exist nil is returned
-    -(wxPointerObject*) getDataViewItemFromBuffer:(const wxDataViewItem&)item;
-    -(wxPointerObject*) getItemFromBuffer:(wxPointerObject*)item;
-    -(BOOL)             isInBuffer:(wxPointerObject*)item;
-    -(void)             removeFromBuffer:(wxPointerObject*)item;
+    -(wxLDPointerObject*) getDataViewItemFromBuffer:(const wxDataViewItem&)item;
+    -(wxLDPointerObject*) getItemFromBuffer:(wxLDPointerObject*)item;
+    -(BOOL)             isInBuffer:(wxLDPointerObject*)item;
+    -(void)             removeFromBuffer:(wxLDPointerObject*)item;
 
     // buffered children handling
     -(void)             clearChildren;
-    -(wxPointerObject*) getChild:(NSUInteger)index;
+    -(wxLDPointerObject*) getChild:(NSUInteger)index;
     -(NSUInteger)       getChildCount;
 
     // buffer handling
@@ -340,24 +340,24 @@ private:
     -(void)     setSortDescriptors:(NSArray*)newSortDescriptors;
 
     // access to wxWidgets variables
-    -(wxPointerObject*) currentParentItem;
+    -(wxLDPointerObject*) currentParentItem;
     -(wxCocoaDataViewControl*) implementation;
     -(wxDataViewModel*) model;
-    -(void) setCurrentParentItem:(wxPointerObject*)newCurrentParentItem;
+    -(void) setCurrentParentItem:(wxLDPointerObject*)newCurrentParentItem;
     -(void) setImplementation:(wxCocoaDataViewControl*)newImplementation;
     -(void) setModel:(wxDataViewModel*)newModel;
 
     // other methods
     -(void)
-    bufferItem:(wxPointerObject*)parentItem
+    bufferItem:(wxLDPointerObject*)parentItem
         withChildren:(wxDataViewItemArray*)dataViewChildrenPtr;
 @end
 
 // ============================================================================
-// wxCustomCell: used for custom renderers
+// wxLDCustomCell: used for custom renderers
 // ============================================================================
 
-@interface wxCustomCell : NSTextFieldCell
+@interface wxLDCustomCell : NSTextFieldCell
 {
 }
 
@@ -365,10 +365,10 @@ private:
 @end
 
 // ============================================================================
-// wxImageCell: used for bitmap renderer
+// wxLDImageCell: used for bitmap renderer
 // ============================================================================
 
-@interface wxImageCell : NSImageCell
+@interface wxLDImageCell : NSImageCell
 {
 }
 
@@ -380,7 +380,7 @@ private:
 // NSTextFieldCell customized to allow vertical alignment
 // ============================================================================
 
-@interface wxTextFieldCell : NSTextFieldCell
+@interface wxLDTextFieldCell : NSTextFieldCell
 {
 @private
     int alignment_;
@@ -391,7 +391,7 @@ private:
 @end
 
 // ============================================================================
-// wxImageTextCell
+// wxLDImageTextCell
 // ============================================================================
 //
 // As the native cocoa environment does not have a cell displaying an icon/
@@ -399,13 +399,13 @@ private:
 // This implementation follows the implementation of Chuck Pisula in Apple's
 // DragNDropOutline sample application.
 // Although in wxDataViewCtrl icons are used on OSX icons do not exist for
-// display. Therefore, the cell is also called wxImageTextCell.
+// display. Therefore, the cell is also called wxLDImageTextCell.
 // Instead of displaying images of any size (which is possible) this cell uses
 // a fixed size for displaying the image. Larger images are scaled to fit
 // into their reserved space. Smaller or not existing images use the fixed
 // reserved size and are scaled if necessary.
 //
-@interface wxImageTextCell : wxTextFieldCell
+@interface wxLDImageTextCell : wxLDTextFieldCell
 {
 @private
     CGFloat xImageShift;    // shift for the image in x-direction from border
@@ -432,10 +432,10 @@ private:
 @end
 
 // ============================================================================
-// wxCocoaOutlineView
+// wxLDCocoaOutlineView
 // ============================================================================
 
-@interface wxCocoaOutlineView : NSOutlineView <NSOutlineViewDelegate>
+@interface wxLDCocoaOutlineView : NSOutlineView <NSOutlineViewDelegate>
 {
 @private
     // column and row of the cell being edited or -1 if none
@@ -553,9 +553,9 @@ private:
     void InitOutlineView(long style);
     int GetDefaultRowHeight() const;
 
-    wxCocoaOutlineDataSource* m_DataSource;
+    wxLDCocoaOutlineDataSource* m_DataSource;
 
-    wxCocoaOutlineView* m_OutlineView;
+    wxLDCocoaOutlineView* m_OutlineView;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_

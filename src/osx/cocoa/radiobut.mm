@@ -27,14 +27,14 @@ NSString* alternateActionsSelector = @"controlAction%d:";
 
 extern void wxOSX_controlAction(NSView* self, SEL _cmd, id sender);
 
-@interface wxNSRadioButton : NSButton
+@interface wxLDNSRadioButton : NSButton
 {
     NSTrackingRectTag rectTag;
 }
 
 @end
 
-@implementation wxNSRadioButton
+@implementation wxLDNSRadioButton
 + (void)initialize
 {
     static BOOL initialized = NO;
@@ -106,7 +106,7 @@ wxWidgetImplType* wxWidgetImpl::CreateRadioButton( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSRadioButton* v = [[wxNSRadioButton alloc] initWithFrame:r];
+    wxLDNSRadioButton* v = [[wxLDNSRadioButton alloc] initWithFrame:r];
 
     [v setButtonType:NSRadioButton];
     [v setAlignment:NSLeftTextAlignment];

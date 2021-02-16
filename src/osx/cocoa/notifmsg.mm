@@ -42,7 +42,7 @@
 #include "wx/utils.h"
 #include <map>
 
-@interface wxUserNotificationHandler : NSObject <NSUserNotificationCenterDelegate>
+@interface wxLDUserNotificationHandler : NSObject <NSUserNotificationCenterDelegate>
 
 @end
 
@@ -190,7 +190,7 @@ public:
     {
         if (!ms_handler)
         {
-            ms_handler = [wxUserNotificationHandler alloc];
+            ms_handler = [wxLDUserNotificationHandler alloc];
             [NSUserNotificationCenter defaultUserNotificationCenter].delegate = ms_handler;
         }
     }
@@ -205,20 +205,20 @@ private:
     wxString m_id;
     wxVector<wxWindowID> m_actions;
     
-    static wxUserNotificationHandler* ms_handler;
+    static wxLDUserNotificationHandler* ms_handler;
     static std::map<wxString, wxUserNotificationMsgImpl*> ms_activeNotifications;
     static int ms_notifIdBase;
 };
 
-wxUserNotificationHandler* wxUserNotificationMsgImpl::ms_handler = nil;
+wxLDUserNotificationHandler* wxUserNotificationMsgImpl::ms_handler = nil;
 std::map<wxString, wxUserNotificationMsgImpl*> wxUserNotificationMsgImpl::ms_activeNotifications;
 int wxUserNotificationMsgImpl::ms_notifIdBase = 1000;
 
 // ----------------------------------------------------------------------------
-// wxUserNotificationHandler
+// wxLDUserNotificationHandler
 // ----------------------------------------------------------------------------
 
-@implementation wxUserNotificationHandler
+@implementation wxLDUserNotificationHandler
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {

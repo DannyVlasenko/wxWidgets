@@ -25,7 +25,7 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+    wxLDNSButton* v = [[wxLDNSButton alloc] initWithFrame:r];
 
     [v setButtonType:NSSwitchButton];
     if (style & wxALIGN_RIGHT)

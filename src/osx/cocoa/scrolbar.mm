@@ -21,12 +21,12 @@
 #include "wx/math.h"
 #include "wx/osx/private.h"
 
-@interface wxNSScroller : NSScroller
+@interface wxLDNSScroller : NSScroller
 {
 }
 @end
 
-@implementation wxNSScroller
+@implementation wxLDNSScroller
 
 + (void)initialize
 {
@@ -57,13 +57,13 @@ public :
     {
         double v = ((double) value)/m_maximum;
         double t = ((double) thumbSize)/(m_maximum+thumbSize);
-        [(wxNSScroller*) m_osxView setDoubleValue:v];
-        [(wxNSScroller*) m_osxView setKnobProportion:t];
+        [(wxLDNSScroller*) m_osxView setDoubleValue:v];
+        [(wxLDNSScroller*) m_osxView setKnobProportion:t];
     }
 
     virtual wxInt32 GetValue() const wxOVERRIDE
     {
-        return wxRound([(wxNSScroller*) m_osxView floatValue] * m_maximum);
+        return wxRound([(wxLDNSScroller*) m_osxView floatValue] * m_maximum);
     }
 
     virtual wxInt32 GetMaximum() const wxOVERRIDE
@@ -143,7 +143,7 @@ wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
     // the creation rect defines the orientation
     NSRect createRect = ( style & wxSB_HORIZONTAL ) ? NSMakeRect(r.origin.x, r.origin.y , 17, 16) :
         NSMakeRect(r.origin.x, r.origin.y , 16, 17);
-    wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:createRect];
+    wxLDNSScroller* v = [[wxLDNSScroller alloc] initWithFrame:createRect];
     [v setFrame:r];
 
     wxWidgetCocoaImpl* c = new wxOSXScrollBarCocoaImpl( wxpeer, v );

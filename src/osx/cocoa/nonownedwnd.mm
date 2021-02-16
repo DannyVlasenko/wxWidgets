@@ -100,7 +100,7 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 // wx category for NSWindow (our own and wrapped instances)
 //
 
-@interface NSWindow (wxNSWindowSupport)
+@interface NSWindow (wxLDNSWindowSupport)
 
 - (wxNonOwnedWindowCocoaImpl*) WX_implementation;
 
@@ -108,7 +108,7 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 
 @end
 
-@implementation NSWindow (wxNSWindowSupport)
+@implementation NSWindow (wxLDNSWindowSupport)
 
 - (wxNonOwnedWindowCocoaImpl*) WX_implementation
 {
@@ -152,7 +152,7 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 static NSResponder* s_nextFirstResponder = NULL;
 static NSResponder* s_formerFirstResponder = NULL;
 
-@interface wxNSWindow : NSWindow
+@interface wxLDNSWindow : NSWindow
 {
 }
 
@@ -162,7 +162,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 - (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
-@implementation wxNSWindow
+@implementation wxLDNSWindow
 
 - (void)sendEvent:(NSEvent *) event
 {
@@ -228,7 +228,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 
 @end
 
-@interface wxNSPanel : NSPanel
+@interface wxLDNSPanel : NSPanel
 {
 }
 
@@ -238,7 +238,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 - (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
-@implementation wxNSPanel
+@implementation wxLDNSPanel
 
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
@@ -307,7 +307,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 
 static void *EffectiveAppearanceContext = &EffectiveAppearanceContext;
 
-@interface wxNonOwnedWindowController : NSObject <NSWindowDelegate>
+@interface wxLDNonOwnedWindowController : NSObject <NSWindowDelegate>
 {
 }
 
@@ -327,7 +327,7 @@ static void *EffectiveAppearanceContext = &EffectiveAppearanceContext;
 
 extern int wxOSXGetIdFromSelector(SEL action );
 
-@implementation wxNonOwnedWindowController
+@implementation wxLDNonOwnedWindowController
 
 - (id) init
 {
@@ -479,7 +479,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
 
 - (void)windowDidMove:(NSNotification *)notification
 {
-    wxNSWindow* window = (wxNSWindow*) [notification object];
+    wxLDNSWindow* window = (wxLDNSWindow*) [notification object];
     wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
@@ -548,13 +548,13 @@ extern int wxOSXGetIdFromSelector(SEL action );
 {
     wxUnusedVar(sender);
 
-    if ([anObject isKindOfClass:[wxNSTextField class]])
+    if ([anObject isKindOfClass:[wxLDNSTextField class]])
     {
-        wxNSTextField* tf = (wxNSTextField*) anObject;
-        wxNSTextFieldEditor* editor = [tf fieldEditor];
+        wxLDNSTextField* tf = (wxLDNSTextField*) anObject;
+        wxLDNSTextFieldEditor* editor = [tf fieldEditor];
         if ( editor == nil )
         {
-            editor = [[wxNSTextFieldEditor alloc] init];
+            editor = [[wxLDNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
             [editor setTextField:tf];
             [tf setFieldEditor:editor];
@@ -562,13 +562,13 @@ extern int wxOSXGetIdFromSelector(SEL action );
         }
         return editor;
     } 
-    else if ([anObject isKindOfClass:[wxNSComboBox class]])
+    else if ([anObject isKindOfClass:[wxLDNSComboBox class]])
     {
-        wxNSComboBox * cb = (wxNSComboBox*) anObject;
-        wxNSTextFieldEditor* editor = [cb fieldEditor];
+        wxLDNSComboBox * cb = (wxLDNSComboBox*) anObject;
+        wxLDNSTextFieldEditor* editor = [cb fieldEditor];
         if ( editor == nil )
         {
-            editor = [[wxNSTextFieldEditor alloc] init];
+            editor = [[wxLDNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
             [editor setTextField:cb];
             [cb setFieldEditor:editor];
@@ -697,7 +697,7 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
 {
     if ( !m_wxPeer->IsNativeWindowWrapper() )
     {
-        [(wxNonOwnedWindowController*)[m_macWindow delegate] removeObservers:m_macWindow];
+        [(wxLDNonOwnedWindowController*)[m_macWindow delegate] removeObservers:m_macWindow];
         [m_macWindow setDelegate:nil];
      
         // make sure we remove this first, otherwise the ref count will not lead to the 
@@ -714,7 +714,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
 {
     if ( !m_wxPeer->IsNativeWindowWrapper() )
     {
-        [(wxNonOwnedWindowController*)[m_macWindow delegate] removeObservers:m_macWindow];
+        [(wxLDNonOwnedWindowController*)[m_macWindow delegate] removeObservers:m_macWindow];
         [m_macWindow setDelegate:nil];
     }
 }
@@ -722,19 +722,19 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
-    static wxNonOwnedWindowController* controller = NULL;
+    static wxLDNonOwnedWindowController* controller = NULL;
 
     if ( !controller )
-        controller =[[wxNonOwnedWindowController alloc] init];
+        controller =[[wxLDNonOwnedWindowController alloc] init];
 
 
     int windowstyle = NSBorderlessWindowMask;
 
     if ( style & wxFRAME_TOOL_WINDOW || ( style & wxPOPUP_WINDOW ) ||
             GetWXPeer()->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
-        m_macWindow = [wxNSPanel alloc];
+        m_macWindow = [wxLDNSPanel alloc];
     else
-        m_macWindow = [wxNSWindow alloc];
+        m_macWindow = [wxLDNSWindow alloc];
 
     [m_macWindow setAcceptsMouseMovedEvents:YES];
 

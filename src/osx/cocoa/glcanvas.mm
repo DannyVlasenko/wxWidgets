@@ -113,13 +113,13 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     return [[NSOpenGLPixelFormat alloc] initWithAttributes:(NSOpenGLPixelFormatAttribute*) attribs];
 }
 
-@interface wxNSCustomOpenGLView : NSOpenGLView
+@interface wxLDNSCustomOpenGLView : NSOpenGLView
 {
 }
 
 @end
 
-@implementation wxNSCustomOpenGLView
+@implementation wxLDNSCustomOpenGLView
 
 + (void)initialize
 {
@@ -173,7 +173,7 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
 
     
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
-    wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
+    wxLDNSCustomOpenGLView* v = [[wxLDNSCustomOpenGLView alloc] initWithFrame:r];
     [v setWantsBestResolutionOpenGLSurface:YES];
     
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_UserKeyEvents | wxWidgetImpl::Widget_UserMouseEvents );

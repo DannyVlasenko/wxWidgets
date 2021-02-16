@@ -15,7 +15,7 @@
 #include "wx/statbox.h"
 #include "wx/osx/private.h"
 
-@implementation wxNSBox
+@implementation wxLDNSBox
 
 + (void)initialize
 {
@@ -34,7 +34,7 @@ namespace
     class wxStaticBoxCocoaImpl : public wxWidgetCocoaImpl
     {
     public:
-        wxStaticBoxCocoaImpl(wxWindowMac *wxpeer, wxNSBox *v)
+        wxStaticBoxCocoaImpl(wxWindowMac *wxpeer, wxLDNSBox *v)
         : wxWidgetCocoaImpl(wxpeer, v)
         {
         }
@@ -70,7 +70,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
+    wxLDNSBox* v = [[wxLDNSBox alloc] initWithFrame:r];
     NSSize margin = { 0.0, 0.0 };
     [v setContentViewMargins: margin];
     [v sizeToFit];

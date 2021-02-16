@@ -42,7 +42,7 @@
 #include "wx/osx/private.h"
 
 
-@interface wxFontPanelDelegate : NSObject<NSWindowDelegate>
+@interface wxLDFontPanelDelegate : NSObject<NSWindowDelegate>
 {
     @public
     bool m_isUnderline;
@@ -53,11 +53,11 @@
 - (id)init;
 - (void)changeAttributes:(id)sender;
 - (void)changeFont:(id)sender;
-@end // interface wxNSFontPanelDelegate : NSObject
+@end // interface wxLDNSFontPanelDelegate : NSObject
 
 
 
-@implementation wxFontPanelDelegate : NSObject
+@implementation wxLDFontPanelDelegate : NSObject
 
 - (id)init
 {
@@ -101,7 +101,7 @@
 }
 @end
 
-@interface wxMacFontPanelAccView : NSView
+@interface wxLDMacFontPanelAccView : NSView
 {
     BOOL m_okPressed ;
     BOOL m_shouldClose ;
@@ -117,7 +117,7 @@
 - (NSButton*)okButton;
 @end
 
-@implementation wxMacFontPanelAccView : NSView
+@implementation wxLDMacFontPanelAccView : NSView
 - (id)initWithFrame:(NSRect)rectBox
 {
     if ( self = [super initWithFrame:rectBox] )
@@ -209,18 +209,18 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     // setting up the ok/cancel buttons
     NSFontPanel* fontPanel = [NSFontPanel sharedFontPanel] ;
 
-    wxFontPanelDelegate* theFPDelegate = [[wxFontPanelDelegate alloc] init];
+    wxLDFontPanelDelegate* theFPDelegate = [[wxLDFontPanelDelegate alloc] init];
     [fontPanel setDelegate:theFPDelegate];
 
 
     [fontPanel setFloatingPanel:NO] ;
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
 
-    wxMacFontPanelAccView* accessoryView = nil;
-    if ( [fontPanel accessoryView] == nil || [[fontPanel accessoryView] class] != [wxMacFontPanelAccView class] )
+    wxLDMacFontPanelAccView* accessoryView = nil;
+    if ( [fontPanel accessoryView] == nil || [[fontPanel accessoryView] class] != [wxLDMacFontPanelAccView class] )
     {
         NSRect rectBox = NSMakeRect( 0 , 0 , 192 , 40 );
-        accessoryView = [[wxMacFontPanelAccView alloc] initWithFrame:rectBox];
+        accessoryView = [[wxLDMacFontPanelAccView alloc] initWithFrame:rectBox];
         [fontPanel setAccessoryView:accessoryView];
         [accessoryView release];
 
@@ -228,7 +228,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     }
     else
     {
-        accessoryView = (wxMacFontPanelAccView*)[fontPanel accessoryView];
+        accessoryView = (wxLDMacFontPanelAccView*)[fontPanel accessoryView];
     }
 
     [accessoryView resetFlags];
@@ -316,7 +316,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 - (id)init;
 - (BOOL)windowShouldClose:(id)sender;
 - (BOOL)isClosed;
-@end // interface wxNSFontPanelDelegate : NSObject
+@end // interface wxLDNSFontPanelDelegate : NSObject
 
 @implementation wxWCDelegate : NSObject
 
@@ -344,7 +344,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
     return m_bIsClosed;
 }
 
-@end // wxNSFontPanelDelegate
+@end // wxLDNSFontPanelDelegate
 
 // ---------------------------------------------------------------------------
 // wxWCODelegate - Window Closed or Open delegate
@@ -362,7 +362,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 - (void)windowDidUpdate:(NSNotification *)aNotification;
 - (BOOL)isClosed;
 - (BOOL)isOpen;
-@end // interface wxNSFontPanelDelegate : NSObject
+@end // interface wxLDNSFontPanelDelegate : NSObject
 
 @implementation wxWCODelegate : NSObject
 
@@ -408,7 +408,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
     return m_bIsOpen;
 }
 
-@end // wxNSFontPanelDelegate
+@end // wxLDNSFontPanelDelegate
 
 // ---------------------------------------------------------------------------
 // wxFontDialog

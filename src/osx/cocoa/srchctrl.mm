@@ -28,14 +28,14 @@
 #include "wx/osx/cocoa/private/textimpl.h"
 
 
-@interface wxNSSearchField : NSSearchField
+@interface wxLDNSSearchField : NSSearchField
 {
     BOOL m_withinTextDidChange;
 }
 
 @end
 
-@implementation wxNSSearchField
+@implementation wxLDNSSearchField
 
 + (void)initialize
 {
@@ -106,15 +106,15 @@
 // wxMacSearchFieldControl
 // ============================================================================
 
-class wxNSSearchFieldControl : public wxNSTextFieldControl, public wxSearchWidgetImpl
+class wxLDNSSearchFieldControl : public wxLDNSTextFieldControl, public wxSearchWidgetImpl
 {
 public :
-    wxNSSearchFieldControl( wxTextCtrl *wxPeer, wxNSSearchField* w  ) : wxNSTextFieldControl(wxPeer, w)
+    wxLDNSSearchFieldControl( wxTextCtrl *wxPeer, wxLDNSSearchField* w  ) : wxLDNSTextFieldControl(wxPeer, w)
     {
         m_searchFieldCell = [w cell];
         m_searchField = w;
     }
-    ~wxNSSearchFieldControl();
+    ~wxLDNSSearchFieldControl();
 
     // search field options
     virtual void ShowSearchButton( bool show ) wxOVERRIDE
@@ -162,7 +162,7 @@ public :
 
     virtual bool SetFocus() wxOVERRIDE
     {
-       return  wxNSTextFieldControl::SetFocus();
+       return  wxLDNSTextFieldControl::SetFocus();
     }
 
     void controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender)) wxOVERRIDE
@@ -202,11 +202,11 @@ public :
     }
 
 private:
-    wxNSSearchField* m_searchField;
+    wxLDNSSearchField* m_searchField;
     NSSearchFieldCell* m_searchFieldCell;
 } ;
 
-wxNSSearchFieldControl::~wxNSSearchFieldControl()
+wxLDNSSearchFieldControl::~wxLDNSSearchFieldControl()
 {
 }
 
@@ -220,7 +220,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxSearchCtrl* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSSearchField* v = [[wxNSSearchField alloc] initWithFrame:r];
+    wxLDNSSearchField* v = [[wxLDNSSearchField alloc] initWithFrame:r];
 
     // Make it behave consistently with the single line wxTextCtrl
     [[v cell] setScrollable:YES];
@@ -229,7 +229,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxSearchCtrl* wxpeer,
     // per wx default cancel is not shown
     [[v cell] setCancelButtonCell:nil];
 
-    wxNSSearchFieldControl* c = new wxNSSearchFieldControl( wxpeer, v );
+    wxLDNSSearchFieldControl* c = new wxLDNSSearchFieldControl( wxpeer, v );
     c->SetNeedsFrame( false );
     c->SetCentredLook( false );
     c->SetStringValue( str );

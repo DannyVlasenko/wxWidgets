@@ -80,11 +80,11 @@ protected:
 };
 
 #if 0
-class wxNSComboBoxControl : public wxUITextFieldControl, public wxComboWidgetImpl
+class wxLDNSComboBoxControl : public wxUITextFieldControl, public wxComboWidgetImpl
 {
 public :
-    wxNSComboBoxControl( wxWindow *wxPeer, WXWidget w );
-    virtual ~wxNSComboBoxControl();
+    wxLDNSComboBoxControl( wxWindow *wxPeer, WXWidget w );
+    virtual ~wxLDNSComboBoxControl();
 
     virtual int GetSelectedItem() const;
     virtual void SetSelectedItem(int item);
